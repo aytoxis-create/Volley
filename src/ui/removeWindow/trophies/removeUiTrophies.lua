@@ -1,7 +1,7 @@
 function removeUITrophies(name)
   isOpenProfile[name] = false
 
-  local ids = { 26, 27, 28, 29, 32, 33 }
+  local ids = { 26, 27, 28, 29, 32, 33, 34 }
   for i = 1, #ids do
     closeWindow(ids[i], name)
   end

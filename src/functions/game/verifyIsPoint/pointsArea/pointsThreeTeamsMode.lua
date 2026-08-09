@@ -29,7 +29,7 @@ function pointsThreeTeamsMode(ballX, ballY, index, typeMap, teamIndex)
             toggleMapType()
             updateTeamsColors(1)
             gameStats.canTransform = false
-            disablePlayersCanTransform(4000)
+            
             delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
@@ -82,7 +82,7 @@ function pointsThreeTeamsMode(ballX, ballY, index, typeMap, teamIndex)
             toggleMapType()
             updateTeamsColors(2)
             gameStats.canTransform = false
-            disablePlayersCanTransform(4000)
+            
             delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
@@ -135,7 +135,7 @@ function pointsThreeTeamsMode(ballX, ballY, index, typeMap, teamIndex)
             toggleMapType()
             updateTeamsColors(3)
             gameStats.canTransform = false
-            disablePlayersCanTransform(4000)
+            
             delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()

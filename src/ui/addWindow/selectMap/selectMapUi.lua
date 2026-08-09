@@ -14,7 +14,7 @@ function selectMapUI(name)
 
       if index == gameStats.customMapIndex then
         textSelect = "<j>Selected map<n>"
-      elseif userLevel > 1 then
+      elseif userLevel == 1 then
         textSelect = "<n2>Select map<n>"
       end
 

@@ -416,11 +416,24 @@ local function cmdNP(args)
         customMapsFourTeamsMode[34][2]) or
       customMaps[6][1]
 
-  mapsToTest[1] = (validateMap({ name, args[2], 1 }) and args[2]) or defaultMap
 
-  mapsToTest[2] = validateMap({ name, args[3], 2 }) or defaultMap
-  mapsToTest[3] = validateMap({ name, args[4], 3 }) or
-      customMapsFourTeamsMode[34][5]
+  if validateMap({ name, args[2], 1 }) then
+    mapsToTest[1] = args[2]
+  else
+    mapsToTest[1] = defaultMap
+  end
+
+  if validateMap({ name, args[3], 2 }) then
+    mapsToTest[2] = args[3]
+  else
+    mapsToTest[2] = defaultMap
+  end
+
+  if validateMap({ name, args[4], 3 }) then
+    mapsToTest[3] = args[4]
+  else
+    mapsToTest[3] = customMapsFourTeamsMode[34][5]
+  end
 
   for i = 1, #mapsToTest do tfm.exec.chatMessage(mapsToTest[i]..'\n', nil) end
   tfm.exec.chatMessage("<vp>Test map(s) loaded<n> ", nil)

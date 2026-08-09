@@ -28,7 +28,7 @@ function pointsFourTeamsMode(ballX, ballY, index, typeMap, teamIndex)
             toggleMapType()
             updateTeamsColors(1)
             gameStats.canTransform = false
-            disablePlayersCanTransform(4000)
+            
             delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
@@ -82,7 +82,7 @@ function pointsFourTeamsMode(ballX, ballY, index, typeMap, teamIndex)
             toggleMapType()
             updateTeamsColors(2)
             gameStats.canTransform = false
-            disablePlayersCanTransform(4000)
+            
             delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
@@ -134,7 +134,7 @@ function pointsFourTeamsMode(ballX, ballY, index, typeMap, teamIndex)
             toggleMapType()
             updateTeamsColors(3)
             gameStats.canTransform = false
-            disablePlayersCanTransform(4000)
+            
             delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
@@ -186,7 +186,7 @@ function pointsFourTeamsMode(ballX, ballY, index, typeMap, teamIndex)
             toggleMapType()
             updateTeamsColors(4)
             gameStats.canTransform = false
-            disablePlayersCanTransform(4000)
+            
             delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
@@ -238,7 +238,7 @@ function pointsFourTeamsMode(ballX, ballY, index, typeMap, teamIndex)
             updateTeamsColors(1)
             toggleMapType()
             gameStats.canTransform = false
-            disablePlayersCanTransform(4000)
+            
             delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
@@ -292,7 +292,7 @@ function pointsFourTeamsMode(ballX, ballY, index, typeMap, teamIndex)
             toggleMapType()
             updateTeamsColors(2)
             gameStats.canTransform = false
-            disablePlayersCanTransform(4000)
+            
             delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
@@ -346,7 +346,7 @@ function pointsFourTeamsMode(ballX, ballY, index, typeMap, teamIndex)
             toggleMapType()
             updateTeamsColors(3)
             gameStats.canTransform = false
-            disablePlayersCanTransform(4000)
+            
             delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()

@@ -3,7 +3,7 @@ function toggleMap()
   gameStats.canTransform = false
 
   if not gameStats.minimalist then
-    disablePlayersCanTransform(1500)
+    disablePlayersCanTransform(3500)
   end
 
   ballOnGame = false
@@ -16,6 +16,7 @@ function toggleMap()
     if gameStats.teamsMode then
       if mapsToTest[2] ~= "" then
         tfm.exec.newGame(mapsToTest[2])
+        print(mapsToTest[2])
         local foundMap = addTimer(function(i)
           if i == 1 then
             foundBallSpawnsOnMap(mapsToTest[2], false)
@@ -98,6 +99,12 @@ function toggleMap()
         })
       end
     end, delayMS)
+
+    if globalSettings.minimalist then
+      addTimer(function(i) 
+        gameStats.canTransform = true
+      end, delayMS + 1500)
+    end
     
     tfm.exec.addPhysicObject (99999, 800, webY, {
       type = 15,
@@ -166,6 +173,12 @@ function toggleMap()
         })
       end
     end, delayMS)
+
+    if globalSettings.minimalist then
+      addTimer(function(i) 
+        gameStats.canTransform = true
+      end, delayMS + 1500)
+    end
 
     tfm.exec.addPhysicObject (99999, 800, webY, {
       type = 15,

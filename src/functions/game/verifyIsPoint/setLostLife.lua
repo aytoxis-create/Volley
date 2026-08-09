@@ -33,7 +33,6 @@ function setLostLife()
             toggleMapType()
             updateTeamsColors(1)
             gameStats.canTransform = false
-            disablePlayersCanTransform(4000)
             delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
@@ -76,7 +75,6 @@ function setLostLife()
             toggleMapType()
             updateTeamsColors(2)
             gameStats.canTransform = false
-            disablePlayersCanTransform(4000)
             delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
@@ -117,7 +115,6 @@ function setLostLife()
             toggleMapType()
             updateTeamsColors(3)
             gameStats.canTransform = false
-            disablePlayersCanTransform(4000)
             delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
@@ -158,7 +155,6 @@ function setLostLife()
             toggleMapType()
             updateTeamsColors(4)
             gameStats.canTransform = false
-            disablePlayersCanTransform(4000)
             delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
@@ -206,7 +202,6 @@ function setLostLife()
               updateTeamsColors(1)
               toggleMapType()
               gameStats.canTransform = false
-              disablePlayersCanTransform(4000)
               delayToToggleMap = addTimer(function(i)
                 if i == 1 then
                   toggleMap()
@@ -249,7 +244,6 @@ function setLostLife()
               toggleMapType()
               updateTeamsColors(2)
               gameStats.canTransform = false
-              disablePlayersCanTransform(4000)
               delayToToggleMap = addTimer(function(i)
                 if i == 1 then
                   toggleMap()
@@ -292,7 +286,6 @@ function setLostLife()
               toggleMapType()
               updateTeamsColors(3)
               gameStats.canTransform = false
-              disablePlayersCanTransform(4000)
               delayToToggleMap = addTimer(function(i)
                 if i == 1 then
                   toggleMap()

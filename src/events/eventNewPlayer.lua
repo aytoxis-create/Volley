@@ -11,10 +11,8 @@ function eventNewPlayer(name)
 
   if tfm.get.room.isTribeHouse then
     if tfm.get.room.name:sub(3) == tfm.get.room.playerList[name].tribeName then
-      USER_PERMISSIONS[name] = 2
-
-      if name == "Tonycoolnees#0000" then
-        USER_PERMISSIONS["Tonycoolnees#0000"] = 4
+      if USER_PERMISSIONS[name] == nil then
+        USER_PERMISSIONS[name] = 2
       end
     end
   end
@@ -34,7 +32,8 @@ function eventNewPlayer(name)
       [2] = { image = '19636907e9e.png', quantity = 0 },
       [3] = { image = "197d9272515.png", quantity = 0 },
       [4] = { image = "1984ac78d52.png", quantity = 0 },
-      [5] = { image = "1984ac773d3.png", quantity = 0 }
+      [5] = { image = "1984ac773d3.png", quantity = 0 },
+      [6] = { image = "19fa0498eb4.png", quantity = 0 }
     }
   end
 
@@ -123,6 +122,14 @@ function eventNewPlayer(name)
   end
 
   tfm.exec.setNameColor(name, 0xD1D5DB)
+
+  if timestamp ~= 0 then
+    if tfm.get.room.playerList[name].registrationDate > timestamp then
+      print("kick "..name.."")
+      tfm.exec.kickPlayer(name)
+    end
+  end
+
   if playerBan[name] then
     tfm.exec.chatMessage("<bv>You have been banned from the room by the admin " .. playerBanHistory[name] .. "<n>", name)
     tfm.exec.kickPlayer(name)

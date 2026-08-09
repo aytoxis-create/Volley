@@ -167,6 +167,7 @@ local playerAchievements = {}
 local playerAchievementsImages = {}
 local playerTrophyImage = {}
 local isOpenProfile = {}
+local timestamp = 0
 
 local selectMapOpen = {}
 local selectMapPage = {}
@@ -264,7 +265,8 @@ for name, data in pairs(tfm.get.room.playerList) do
       [2] = { image = '19636907e9e.png', quantity = 0 },
       [3] = { image = "197d9272515.png", quantity = 0 },
       [4] = { image = "1984ac78d52.png", quantity = 0 },
-      [5] = { image = "1984ac773d3.png", quantity = 0 }
+      [5] = { image = "1984ac773d3.png", quantity = 0 },
+      [6] = { image = "19fa0498eb4.png", quantity = 0 }
     }
   end
 
@@ -305,9 +307,6 @@ for name, data in pairs(tfm.get.room.playerList) do
   if tfm.get.room.isTribeHouse then
     if tfm.get.room.name:sub(3) == tfm.get.room.playerList[name].tribeName then
       USER_PERMISSIONS[name] = USER_PERMISSIONS[name] or 2
-      if name == "Tonycoolnees#0000" then
-        USER_PERMISSIONS["Tonycoolnees#0000"] = 3
-      end
     end
   end
 end

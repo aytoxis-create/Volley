@@ -13,6 +13,7 @@ function profileUI(name, playerTarget)
   ui.addTrophie(29, "trophie3", name, playerTarget, 355, 230, 50, 50, 1)
   ui.addTrophie(32, "trophie4", name, playerTarget, 420, 230, 50, 50, 1)
   ui.addTrophie(33, "trophie5", name, playerTarget, 485, 230, 50, 50, 1)
+  ui.addTrophie(34, "trophie6", name, playerTarget, 550, 230, 50, 50, 1)
 
   appendAchievementsImages(name, images1)
   appendAchievementsImages(name, images2)

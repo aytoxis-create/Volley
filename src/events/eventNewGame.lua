@@ -1,8 +1,9 @@
 function eventNewGame()
   if firstRun then
     print('first run')
-    print(USER_PERMISSIONS)
     initUsersPermissions()
+    lobbyMapConfig()
+    print(USER_PERMISSIONS)
     firstRun = false
   end
 

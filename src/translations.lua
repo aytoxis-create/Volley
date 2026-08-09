@@ -1,7 +1,7 @@
 local lang = {}
 local languages = "[AR/BR/EN/FR/PL]"
 
-local gameVersion = "V2.3.2v"
+local gameVersion = "V2.4.0"
 
 lang.br = {
   welcomeMessage = "<j>Bem vindo ao Volley, jogo criado por Refletz#6472<n>",
@@ -39,7 +39,8 @@ lang.br = {
     [2] = "Futevôlei Ultimate Team Badge",
     [3] = "Copa do mundo de Futebol",
     [4] = "Volley Roulette badge",
-    [5] = "Volley Wild Card badge"
+    [5] = "Volley Wild Card badge",
+    [6] = ""
   },
   mapSelect = 'Selecionar um mapa',
 }
@@ -80,7 +81,8 @@ lang.en = {
     [2] = "FootVolley Ultimate Team Badge",
     [3] = "Volley Soccer World Cup",
     [4] = "Volley Roulette badge",
-    [5] = "Volley Wild Card"
+    [5] = "Volley Wild Card",
+    [6] = ""
   },
   mapSelect = 'Select a map'
 }
@@ -121,7 +123,8 @@ lang.ar = {
     [2] = "شارة فريق FootVolley Ultimate Team",
     [3] = "كأس العالم لكرة القدم الطائرة",
     [4] = "شارة روليت الطائرة",
-    [5] = "شارة الكرة الطائرة البرية"
+    [5] = "شارة الكرة الطائرة البرية",
+    [6] = ""
   },
   mapSelect = 'حدد الخريطة'
 }
@@ -162,7 +165,8 @@ lang.fr = {
     [2] = "FootVolley Ultimate Team Badge",
     [3] = "Coupe de monde de soccer volley",
     [4] = "Volley Roulette badge",
-    [5] = "Volley Wild Card badge"
+    [5] = "Volley Wild Card badge",
+    [6] = ""
   },
   mapSelect = 'Sélectionner une carte'
 }
@@ -203,7 +207,8 @@ lang.pl = {
     [2] = "FootVolley Ultimate Team Badge",
     [3] = "Puchar Świata w piłce siatkowej",
     [4] = "Volley Roulette badge",
-    [5] = "Volley Wild Card badge"
+    [5] = "Volley Wild Card badge",
+    [6] = ""
   },
   mapSelect = 'Wybierz mapę'
 }

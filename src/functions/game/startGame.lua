@@ -1,7 +1,7 @@
 function startGame()
   gameStats.canTransform = false
   if not globalSettings.minimalist then
-    disablePlayersCanTransform(1500)
+    disablePlayersCanTransform(3500)
   end
   
   addMatchesToAllPlayers()
@@ -40,12 +40,14 @@ function startGame()
         miceCollision = false,
         groundCollision = false   
       })
-
-      if globalSettings.minimalist then
-        gameStats.canTransform = true
-      end
     end
   end, delayMS)
+
+  if globalSettings.minimalist then
+    addTimer(function(i) 
+      gameStats.canTransform = true
+    end, delayMS + 1500)
+  end
 
   mode = "gameStart"
   tfm.exec.chatMessage("<ch>If you don't want to see the ranking crowns, type the command !crown false<n>", nil)
