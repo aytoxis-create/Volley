@@ -1,4 +1,5 @@
 function eventTextAreaCallback(id, name, c)
+  if playerBan[name] then return end
   if gameStats.initTimer > 2 and gameStats.canJoin then
     if string.sub(c, 1, 11) == "joinTeamRed" and playerInGame[name] == false and playersRed[tonumber(string.sub(c, 12))].name == '' then
       local isPlayerBanned = messagePlayerIsBanned(name)
@@ -223,7 +224,7 @@ function eventTextAreaCallback(id, name, c)
     closeWindow(20, nil)
   elseif c == "roomadmin" then
     tfm.exec.chatMessage("<rose>/room *#volley0" .. name .. "<n>", name)
-  elseif string.sub(c, 1, 4) == "sync" then
+  elseif string.sub(c, 1, 4) == "sync" and USER_PERMISSIONS[name] and USER_PERMISSIONS[name] > 2 then
     local playerSync = string.sub(c, 5)
 
     print(playerLeft[name])
@@ -234,7 +235,7 @@ function eventTextAreaCallback(id, name, c)
     else
       closeWindow(24, name)
       tfm.exec.setPlayerSync(playerSync)
-      tfm.exec.chatMessage("<bv>Set new player sync: " .. playerSync .. "<n>", nil)
+      tfm.exec.chatMessage("<bv>Set new player sync: " .. playerSync .. " selected by admin "..name.."<n>", nil)
     end
   elseif c == "openMode" and USER_PERMISSIONS[name] and USER_PERMISSIONS[name] > 1 then
     settingsMode[name] = true

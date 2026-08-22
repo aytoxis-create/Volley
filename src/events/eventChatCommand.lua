@@ -736,6 +736,10 @@ local function cmdAdmin(args)
 
   if not target or permission > 1 then return end
 
+  if string.match(target, "%*") then
+    return
+  end
+
   -- This loop approach will be outdated when
   -- we are sure that the playerList is
   -- always updated on join and leave events.
@@ -756,6 +760,10 @@ local function cmdUnadmin(args)
 
   if not target then return end
   if USER_PERMISSIONS[target] > 2 then return end
+
+  if string.match(target, "%*") then
+    return
+  end
 
   -- Unadmin All (Perm Admin only)
   if USER_PERMISSIONS[name] > 2 then
@@ -1527,6 +1535,8 @@ COMMANDS = {
 
 -- Main handler
 function eventChatCommand(name, c)
+  if playerBan[name] then return end
+
   local args = split(c)
   local cmdName = string.lower(args[1])
   args[1] = name

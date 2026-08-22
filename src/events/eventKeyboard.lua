@@ -233,6 +233,7 @@ end
   -- Vit0rg
 ]]
 function eventKeyboard(name, key, down, x, y, xv, yv)
+  if playerBan[name] then return end
   -- Shouldn't the player data be memoized?
   local player = tfm.get.room.playerList[name]
   if not player then return end

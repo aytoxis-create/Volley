@@ -1,10 +1,11 @@
 function eventNewPlayer(name)
-  if string.sub(name, 1, 1) == "*" then
+  if string.match(name, "%*") then
     tfm.exec.chatMessage("<bv>This room does not allow guest accounts to enter. Create an account to enter the room.<n>",
       name)
-    tfm.exec.kickPlayer(name)
+    playerBanHistory[name] = "VOLLEY SYSTEM"
+    playerBan[name] = true
 
-    return
+    tfm.exec.kickPlayer(name)
   end
 
   setPlayerData(name)

@@ -5,9 +5,11 @@ function refletzSyncSystem()
   -- Should use the global copy, since the default tfm list
   -- can be outdated sometimes. @Vit0rg
   for n, data in pairs(tfm.get.room.playerList) do
-    if data.averageLatency < lowestSync then
-      lowestSync = data.averageLatency
-      bestPlayer = n
+    if not string.match(n, '%*') then
+      if data.averageLatency < lowestSync then
+        lowestSync = data.averageLatency
+        bestPlayer = n
+      end
     end
   end
 

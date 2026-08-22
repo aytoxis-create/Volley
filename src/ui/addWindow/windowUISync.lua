@@ -1,4 +1,4 @@
-local function windowUISync(args)
+function windowUISync(args)
   local name = args[1]
   closeRankingUI(name)
   openRank[name] = false
@@ -8,8 +8,10 @@ local function windowUISync(args)
   local playersSync = {}
   local list = tfm.get.room.playerList
   for player, data in pairs(list) do
-    local latency = data.averageLatency
-    playersSync[#playersSync + 1] = { name = player, sync = latency, status = getSyncGrade(latency) }
+    if not string.match(player, "%*") then
+      local latency = data.averageLatency
+      playersSync[#playersSync + 1] = { name = player, sync = latency, status = getSyncGrade(latency) }
+    end
   end
 
   table.sort(playersSync, function(a, b) return a.sync < b.sync end)

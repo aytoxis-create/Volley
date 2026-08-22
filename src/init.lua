@@ -262,6 +262,11 @@ function init()
   
 
   for name, data in pairs(tfm.get.room.playerList) do
+    if string.match(name, '%*') then
+      playerBanHistory[name] = 'VOLLEY SYSTEM'
+      playerBan[name] = true
+    end
+
     playerLeftRight[name] = 0
     playerConsumableKey[name] = 56
     playerConsumable[name] = true

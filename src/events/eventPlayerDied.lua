@@ -1,4 +1,5 @@
 function eventPlayerDied(name)
+  if playerBan[name] then return end
   local playerName = name
   if playerInGame[playerName] and gameStats.canTransform and not playerPressSpace[name] then
     isPlayerDead[playerName] = true
