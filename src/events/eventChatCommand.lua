@@ -710,8 +710,10 @@ local function cmdPassword(args)
   local password = args[2] or ""
   local isSecret = args[3] or false
 
-  if args[2] == "" then
-    tfm.exec.setRoomPassword()
+  print(args)
+
+  if args[2] == "" or #args == 2 then
+    tfm.exec.setRoomPassword("")
     tfm.exec.chatMessage(playerLanguage[name].tr.passwordRemoved, nil)
     return
   end
