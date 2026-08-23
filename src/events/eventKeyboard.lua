@@ -247,10 +247,8 @@ function eventKeyboard(name, key, down, x, y, xv, yv)
   player.y = offsetY + y
 
   -- 2. AFK Reset
-  if KEYS[key] then
+  if key == 0 or key == 2 or key == 3 then
     playersAfk[name] = os.time()
-    -- Why this UI cleanup is here?
-    removePlayerTrophy(name)
   end
 
   -- 3. Profile Key (P)
