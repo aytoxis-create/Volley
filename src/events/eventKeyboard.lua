@@ -247,7 +247,7 @@ function eventKeyboard(name, key, down, x, y, xv, yv)
   player.y = offsetY + y
 
   -- 2. AFK Reset
-  if key == 0 or key == 2 or key == 3 then
+  if key == 0 or key == 1 or key == 2 or key == 3 then
     playersAfk[name] = os.time()
   end
 
