@@ -1,20 +1,20 @@
 local SKILLS = {
   root = {
-    name = "🌱 Root Growth",
+    name = "Root Growth",
     desc = "Increases ground grip",
     baseCost = 5,
     costPerLevel = 3,
     requires = nil
   },
   branch = {
-    name = "🌿 Branch Extend",
+    name = "Branch Extend",
     desc = "Shamans: +1 object range/lvl",
     baseCost = 8,
     costPerLevel = 4,
     requires = "root"
   },
-  leaf = { name = "🍃 Leaf Armor", desc = "-10% fall damage/lvl", baseCost = 12, costPerLevel = 5, requires = "branch" },
-  fruit = { name = "🍎 Fruit Harvest", desc = "+1 pt every 3 rounds", baseCost = 20, costPerLevel = 10, requires = "leaf" },
+  leaf = { name = "Leaf Armor", desc = "-10% fall damage/lvl", baseCost = 12, costPerLevel = 5, requires = "branch" },
+  fruit = { name = "Fruit Harvest", desc = "+1 pt every 3 rounds", baseCost = 20, costPerLevel = 10, requires = "leaf" },
 }
 
 local CONFIG = {
@@ -41,7 +41,7 @@ for i = 1, #SKILLS do
   SKILL_LOOKUP[SKILLS[i].id] = SKILLS[i]
 end
 
--- 🔹 LOCAL DATA STORE (Fully compatible, no restricted APIs)
+-- LOCAL DATA STORE (Fully compatible, no restricted APIs)
 local PLAYER_DATA = {}
 
 local function initPlayerSkillsData(playerName)
@@ -90,9 +90,9 @@ local function buildUI(playerName)
 
     local btn
     if not hasReq or not sData.unlocked then
-      btn = "<font color='" .. CONFIG.COLORS.locked .. "'>🔒 LOCKED</font>"
+      btn = "<font color='" .. CONFIG.COLORS.locked .. "'>LOCKED</font>"
     elseif sData.level >= CONFIG.MAX_SKILL_LEVEL then
-      btn = "<font color='" .. CONFIG.COLORS.success .. "'>★ MAXED</font>"
+      btn = "<font color='" .. CONFIG.COLORS.success .. "'>MAXED</font>"
     elseif canBuy then
       btn = string.format("<a href='event:buy:%s'><font color='" .. CONFIG.COLORS.success .. "'>[BUY %d]</font></a>", id,
         cost)
