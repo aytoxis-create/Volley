@@ -1135,19 +1135,13 @@ end
 -- PERMANENT ADMIN COMMANDS
 local function cmdBroadcast(args)
   local name = args[1]
-  if #args > 2 then
-    local categories =
-    {
-      ['a'] = '<vi>',
-      ['t'] = '<v>',
-      ['w'] = '<j>'
-    }
 
-    local category = categories[args[2]] or categories['general']
-    local message = "\n" .. category .. args[3]
-  end
+  -- args[1] = player name, args[#args] = command name, message = args[2..#args-1]
+  if #args < 3 then return end
 
-  local message = "<vi>[Announcement]\n" .. args[2]
+  local text = table.concat(args, " ", 2, #args - 1)
+
+  local message = "<vi>[Announcement]\n" .. text
 
   if USER_PERMISSIONS[name] and USER_PERMISSIONS[name] > 2 then
     tfm.exec.chatMessage(message, nil)
@@ -1548,7 +1542,7 @@ function eventChatCommand(name, c)
 
 
   local handler = nil
-  for i = 1, max_depth do
+  for i = max_depth, 1, -1 do
     if COMMANDS[i] and COMMANDS[i][cmdName] then
       handler = COMMANDS[i][cmdName]
       break
