@@ -544,10 +544,8 @@ local function cmdSkipTimer(args)
   local name = args[1]
   if mode ~= "startGame" then return end
 
-  initGame = os.time() + 10000
+  initGame = os.time() + 5000
   tfm.exec.chatMessage(" <bv>skiptimer enabled by " .. name .. " <n> ", nil)
-  tfm.exec.chatMessage(
-    "<vi>Yes, now it is 10s, fix your dopamine addiction and let the script load in peace.")
 end
 
 local function cmdSetDuration(args)
