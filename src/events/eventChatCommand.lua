@@ -1031,6 +1031,11 @@ local function cmdSetTeamMode(args)
   local name = args[1]
   local toggle = args[2]
 
+  if mode ~= "startGame" then
+    tfm.exec.chatMessage('<bv>You can only change the game mode in the lobby<n>', name)
+    return
+  end
+
   if toggle ~= 'true' and toggle ~= 'false' then
     tfm.exec.chatMessage(
       '<j> The second argument must be true or false.\nExample: 4teamsmode true')
