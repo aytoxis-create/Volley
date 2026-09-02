@@ -930,8 +930,8 @@ local function cmdCustomMap(args)
 end
 
 local function cmdCustomBall(args)
-  local name = 1
-  local index = math.abs(math.floor(args[2]))
+  local name = args[1]
+  local index = tonumber(args[2])
 
   if mode ~= "startGame" then return end
 
@@ -940,6 +940,8 @@ local function cmdCustomBall(args)
       name)
     return
   end
+
+  index = math.floor(index)
 
   -- One interesting optimization is to use a
   -- single function to handle custommap and randommap,
