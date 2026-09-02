@@ -169,6 +169,7 @@ local playerTrophyImage = {}
 local isOpenProfile = {}
 local profileKeyTime = {}
 local rankKeyTime = {}
+local panelOpenTime = {}
 local timestamp = 0
 
 local selectMapOpen = {}

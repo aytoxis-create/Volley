@@ -1,3 +1,14 @@
+-- 2s anti-spam cooldown per panel-opening button (closing stays instant)
+local function panelOpenCooldown(name, panel)
+  panelOpenTime[name] = panelOpenTime[name] or {}
+  local lastOpen = panelOpenTime[name][panel]
+  if lastOpen and os.time() - lastOpen < 2000 then
+    return true
+  end
+  panelOpenTime[name][panel] = os.time()
+  return false
+end
+
 function eventTextAreaCallback(id, name, c)
   if playerBan[name] then return end
   if gameStats.initTimer > 2 and gameStats.canJoin then
@@ -176,6 +187,7 @@ function eventTextAreaCallback(id, name, c)
   end
 
   if c == "menuOpen" then
+    if panelOpenCooldown(name, c) then return end
     ui.addWindow(23,
       "<p align='center'><font size='13px'><a href='event:menuClose'>Menu</a>" .. playerLanguage[name].tr.menuOpenText,
       name, 5, 15, 200, 120, 0.2, false, false, _)
@@ -183,6 +195,7 @@ function eventTextAreaCallback(id, name, c)
     ui.addWindow(23, "<p align='center'><font size='13px'><a href='event:menuOpen'>Menu", name, 5, 15, 100, 30, 0.2,
       false, false, _)
   elseif c == "howToPlay" then
+    if panelOpenCooldown(name, c) then return end
     removeUITrophies(name)
     openRank[name] = false
     closeRankingUI(name)
@@ -198,12 +211,14 @@ function eventTextAreaCallback(id, name, c)
     windowForHelp(name, pagesList[name].helpPage, playerLanguage[name].tr.nextMessage,
       playerLanguage[name].tr.previousMessage)
   elseif c == "credits" then
+    if panelOpenCooldown(name, c) then return end
     removeUITrophies(name)
     openRank[name] = false
     closeRankingUI(name)
     ui.addWindow(24, "" .. playerLanguage[name].tr.creditsTitle .. "" .. playerLanguage[name].tr.creditsText .. "", name,
       125, 60, 650, 300, 1, false, true, playerLanguage[name].tr.closeUIText)
   elseif c == "realmode" then
+    if panelOpenCooldown(name, c) then return end
     removeUITrophies(name)
     openRank[name] = false
     closeRankingUI(name)
@@ -321,6 +336,7 @@ function eventTextAreaCallback(id, name, c)
 
     updateSettingsUI(name)
   elseif c == "ranking" then
+    if panelOpenCooldown(name, c) then return end
     removeUITrophies(name)
     openRank[name] = true
     ui.addWindow(24, "<p align='center'><font size='16px'>", name, 125, 60, 650, 300, 1, false, true,
@@ -395,6 +411,7 @@ function eventTextAreaCallback(id, name, c)
       removePlayerTrophyImage(name)
     end
   elseif c == "selectMap" then
+    if panelOpenCooldown(name, c) then return end
     closeAllWindows(name)
     ui.addWindow(24, "<p align='center'><font size='16px'>" .. playerLanguage[name].tr.mapSelect .. "", name, 125, 60,
       650, 300, 1, false, true, playerLanguage[name].tr.closeUIText)
@@ -403,6 +420,7 @@ function eventTextAreaCallback(id, name, c)
     selectMapPage[name] = 1
     selectMapUI(name)
   elseif c == "selectBall" then
+    if panelOpenCooldown(name, c) then return end
     closeAllWindows(name)
     ui.addWindow(24, "<p align='center'><font size='16px'>Ball select", name, 125, 60,
       650, 300, 1, false, true, playerLanguage[name].tr.closeUIText)
@@ -524,6 +542,7 @@ function eventTextAreaCallback(id, name, c)
       end
     end
   elseif c == "settings" and USER_PERMISSIONS[name] and USER_PERMISSIONS[name] > 1 then
+    if panelOpenCooldown(name, c) then return end
     closeRankingUI(name)
     removeUITrophies(name)
     settings[name] = true
