@@ -304,7 +304,7 @@ function init()
 
   ui.addWindow(23, "<p align='center'><font size='13px'><a href='event:menuOpen'>Menu", nil, 5, 15, 100, 30, 0.2, false,
     false, _)
-  ui.addWindow(30, "<p align='center'><font size='13px'><a href='event:selectMap'>Select a map", nil, 10, 370, 150, 30, 1,
+  ui.addWindow(30, "<p align='center'><font size='13px'><a href='event:selectMap'>Select a map/ball", nil, 10, 370, 150, 30, 1,
     false, false, _)
 
   ui.removeTextArea(0)

@@ -2,6 +2,8 @@ function closeAllWindows(name)
   openRank[name] = false
   selectMapOpen[name] = false
   selectMapPage[name] = 1
+  selectBallOpen[name] = false
+  selectBallPage[name] = 1
   local ids = { 21, 22, 24, 25, 44 }
   for i = 1, #ids do
     closeWindow(ids[i], name)

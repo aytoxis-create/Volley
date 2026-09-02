@@ -16,9 +16,7 @@ function spawnBall(x, index, y)
     if gameStats.customBall then
       ball_id = tfm.exec.addShamanObject(balls[gameStats.customBallId].id, ballSpawnX, ballSpawnY, 0, 0, -5, true)
 
-      if balls[gameStats.customBallId].isImage then
-        tfm.exec.addImage(balls[gameStats.customBallId].image, "#" .. ball_id, -15, -15, nil, 1, 1, _, 10)
-      end
+      addBallSkin(ball_id)
 
       ballOnGame = true
       updateTwoBallOnGame()
@@ -39,9 +37,7 @@ function spawnBall(x, index, y)
     if gameStats.customBall then
       ball_id2 = tfm.exec.addShamanObject(balls[gameStats.customBallId].id, ballSpawnX, ballSpawnY, 0, 0, -5, true)
 
-      if balls[gameStats.customBallId].isImage then
-        tfm.exec.addImage(balls[gameStats.customBallId].image, "#" .. ball_id2, -15, -15, nil, 1, 1, _, 10)
-      end
+      addBallSkin(ball_id2)
       ballOnGame2 = true
       updateTwoBallOnGame()
       return
@@ -61,9 +57,7 @@ function spawnBall(x, index, y)
     if gameStats.customBall then
       ball_id3 = tfm.exec.addShamanObject(balls[gameStats.customBallId].id, ballSpawnX, ballSpawnY, 0, 0, -5, true)
 
-      if balls[gameStats.customBallId].isImage then
-        tfm.exec.addImage(balls[gameStats.customBallId].image, "#" .. ball_id3, -15, -15, nil, 1, 1, _, 10)
-      end
+      addBallSkin(ball_id3)
       ballOnGame3 = true
       updateTwoBallOnGame()
       return

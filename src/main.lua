@@ -172,6 +172,8 @@ local timestamp = 0
 local selectMapOpen = {}
 local selectMapPage = {}
 local selectMapImages = {}
+local selectBallOpen = {}
+local selectBallPage = {}
 local customMapCommand = {}
 
 local lobbySpawn = {}
@@ -255,6 +257,8 @@ for name, data in pairs(tfm.get.room.playerList) do
   selectMapOpen[name] = false
   selectMapPage[name] = 1
   selectMapImages[name] = {}
+  selectBallOpen[name] = false
+  selectBallPage[name] = 1
 
   isOpenProfile[name] = false
   playerTrophyImage[name] = 0

@@ -399,8 +399,45 @@ function eventTextAreaCallback(id, name, c)
     ui.addWindow(24, "<p align='center'><font size='16px'>" .. playerLanguage[name].tr.mapSelect .. "", name, 125, 60,
       650, 300, 1, false, true, playerLanguage[name].tr.closeUIText)
     selectMapOpen[name] = true
+    selectBallOpen[name] = false
     selectMapPage[name] = 1
     selectMapUI(name)
+  elseif c == "selectBall" then
+    closeAllWindows(name)
+    ui.addWindow(24, "<p align='center'><font size='16px'>Ball select", name, 125, 60,
+      650, 300, 1, false, true, playerLanguage[name].tr.closeUIText)
+    selectBallOpen[name] = true
+    selectMapOpen[name] = false
+    selectBallPage[name] = 1
+    selectBallUI(name)
+  elseif string.sub(c, 1, 14) == "nextSelectBall" or string.sub(c, 1, 14) == "prevSelectBall" then
+    local index = tonumber(string.sub(c, 15))
+    selectBallPage[name] = index
+    selectBallUI(name)
+  elseif string.sub(c, 1, 7) == "setball" and customMapCommand[name] and not gameStats.realMode and mode == "startGame" and USER_PERMISSIONS[name] and USER_PERMISSIONS[name] > 1 then
+    local index = tonumber(string.sub(c, 8))
+
+    if index and balls[index] then
+      customMapCommand[name] = false
+
+      customMapCommandDelay = addTimer(function(i)
+        if i == 1 then
+          customMapCommand[name] = true
+        end
+      end, 2000, 1, "customMapCommandDelay")
+
+      gameStats.customBall = true
+      gameStats.customBallId = index
+
+      tfm.exec.chatMessage(" <bv>Ball: " .. balls[index].name ..
+        " selected by " .. name .. " <n> ", nil)
+
+      for name1, data in pairs(tfm.get.room.playerList) do
+        if selectBallOpen[name1] then
+          selectBallUI(name1)
+        end
+      end
+    end
   elseif string.sub(c, 1, 13) == "nextSelectMap" or string.sub(c, 1, 13) == "prevSelectMap" then
     local index = tonumber(string.sub(c, 14))
     selectMapPage[name] = index

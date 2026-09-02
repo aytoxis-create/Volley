@@ -44,6 +44,7 @@ function selectMapUI(name)
   end
 
   selectMapPointersNavigation(name, page, maxPage)
+  selectUiTabs(name, "maps")
 
   if page == 1 then
     buttonNextOrPrev(26, name, 135, 300, 200, 30, 1, "<n2>" .. playerLanguage[name].tr.previousMessage .. "</n>")

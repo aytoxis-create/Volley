@@ -8,6 +8,7 @@ function removeSelectUI(name)
   end
 
   ui.removeTextArea(9999999999, name)
+  ui.removeTextArea(99999999999, name)
 
   for i = 1, #selectMapImages[name] do
     tfm.exec.removeImage(selectMapImages[name][i])
