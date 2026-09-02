@@ -253,35 +253,38 @@ function eventKeyboard(name, key, down, x, y, xv, yv)
 
   -- 3. Profile Key (P)
   if key == KEYS.PROFILE then
-    -- Anti-spam: ignore presses within 500ms (spamming crashed the script)
-    if profileKeyTime[name] and os.time() - profileKeyTime[name] < 500 then return end
-    profileKeyTime[name] = os.time()
-
     -- Capture state BEFORE cleanUpUI (removeUITrophies resets isOpenProfile)
     local wasOpen = isOpenProfile[name]
-    cleanUpUI(name)
+
+    -- Closing is instant; opening has a 2s anti-spam cooldown (spamming crashed the script)
     if wasOpen then
+      cleanUpUI(name)
       closeWindow(24, name)
       closeWindow(25, name)
       isOpenProfile[name] = false
       return
     end
+    if profileKeyTime[name] and os.time() - profileKeyTime[name] < 2000 then return end
+    profileKeyTime[name] = os.time()
+
+    cleanUpUI(name)
     profileUI(name, name)
     return
   end
 
   -- 4. Rank Key (L)
   if key == KEYS.RANK then
-    -- Anti-spam: same 500ms protection as the profile key
-    if rankKeyTime[name] and os.time() - rankKeyTime[name] < 500 then return end
-    rankKeyTime[name] = os.time()
-
     if openRank[name] then
+      -- Closing is instant
       openRank[name] = false
       cleanUpUI(name)
       ui.removeTextArea(99992, name)
       closeWindow(266, name)
     else
+      -- Opening has a 2s anti-spam cooldown
+      if rankKeyTime[name] and os.time() - rankKeyTime[name] < 2000 then return end
+      rankKeyTime[name] = os.time()
+
       openRank[name] = true
       ui.addWindow(24, "<p align='center'><font size='16px'>", name, 125, 60, 650, 300, 1, false, true,
         playerLanguage[name].tr.closeUIText)
