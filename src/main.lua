@@ -167,6 +167,8 @@ local playerAchievements = {}
 local playerAchievementsImages = {}
 local playerTrophyImage = {}
 local isOpenProfile = {}
+local profileKeyTime = {}
+local rankKeyTime = {}
 local timestamp = 0
 
 local selectMapOpen = {}

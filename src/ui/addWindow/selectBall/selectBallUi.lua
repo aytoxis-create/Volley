@@ -52,9 +52,10 @@ function selectBallUI(name)
         0x142b2e, 0x2d5a61, 1, true)
 
       if ball.image ~= '' then
-        -- Old custom balls are 30x30 px, the newer stock previews are 40x40 px
-        local imgX = ball.isImage and (182 + ((i - 1) * 125)) or (177 + ((i - 1) * 125))
-        local imgY = ball.isImage and 127 or 122
+        -- Center the preview inside the 100x43 frame (skins are 40x40, legacy ones 30x30)
+        local size = ball.size or 40
+        local imgX = 147 + math.floor((100 - size) / 2) + ((i - 1) * 125)
+        local imgY = 120 + math.floor((43 - size) / 2) + 2
         table.insert(selectMapImages[name],
           tfm.exec.addImage(ball.image, "~999999" .. i .. "", imgX, imgY, name))
       end

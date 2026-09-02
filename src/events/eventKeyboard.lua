@@ -253,10 +253,17 @@ function eventKeyboard(name, key, down, x, y, xv, yv)
 
   -- 3. Profile Key (P)
   if key == KEYS.PROFILE then
+    -- Anti-spam: ignore presses within 500ms (spamming crashed the script)
+    if profileKeyTime[name] and os.time() - profileKeyTime[name] < 500 then return end
+    profileKeyTime[name] = os.time()
+
+    -- Capture state BEFORE cleanUpUI (removeUITrophies resets isOpenProfile)
+    local wasOpen = isOpenProfile[name]
     cleanUpUI(name)
-    if isOpenProfile[name] then
+    if wasOpen then
       closeWindow(24, name)
       closeWindow(25, name)
+      isOpenProfile[name] = false
       return
     end
     profileUI(name, name)
@@ -265,6 +272,10 @@ function eventKeyboard(name, key, down, x, y, xv, yv)
 
   -- 4. Rank Key (L)
   if key == KEYS.RANK then
+    -- Anti-spam: same 500ms protection as the profile key
+    if rankKeyTime[name] and os.time() - rankKeyTime[name] < 500 then return end
+    rankKeyTime[name] = os.time()
+
     if openRank[name] then
       openRank[name] = false
       cleanUpUI(name)
