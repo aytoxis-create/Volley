@@ -1146,7 +1146,7 @@ local function cmdBroadcast(args)
 
   local text = table.concat(args, " ", 2, #args - 1)
 
-  local message = "<vi>[Announcement]\n" .. text
+  local message = "<vi>[#Volley Announcement]: " .. text
 
   if USER_PERMISSIONS[name] and USER_PERMISSIONS[name] > 2 then
     tfm.exec.chatMessage(message, nil)
