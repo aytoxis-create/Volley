@@ -336,9 +336,7 @@ function init()
 
   initGame = os.time() + 25000
 
-  if not checkRoomkAdmins() then
-    spawnGetAdminButton()
-  end
 end
 
+initializeRoomCreator()
 init()

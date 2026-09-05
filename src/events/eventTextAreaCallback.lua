@@ -226,17 +226,6 @@ function eventTextAreaCallback(id, name, c)
       playerLanguage[name].tr.closeUIText)
   elseif c == "closeWindow" then
     closeAllWindows(name)
-  elseif c == "getAdmin" then
-    if USER_PERMISSIONS[name] < 2 then
-      -- Failsafe so a permanent admin
-      -- doesn't click the button and decrease
-      -- the permissions of itself.
-      -- Yes, I know someone will do it.
-      -- @Vit0rg
-      USER_PERMISSIONS[name] = 2
-    end
-    messageLog("<j>" .. name .. " was faster to click and is now an admin!<n>")
-    closeWindow(20, nil)
   elseif c == "roomadmin" then
     tfm.exec.chatMessage("<rose>/room *#volley0" .. name .. "<n>", name)
   elseif string.sub(c, 1, 4) == "sync" and USER_PERMISSIONS[name] and USER_PERMISSIONS[name] > 2 then

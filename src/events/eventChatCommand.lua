@@ -203,7 +203,7 @@ local function cmdAdmins(args)
   local buffer_regular = {}
 
   for admin, permission in pairs(USER_PERMISSIONS) do
-    if permission == 2 then
+    if permission == 2 and admin ~= roomCreator.name then
       buffer_regular[#buffer_regular + 1] = admin
     end
     if permission == 3 then
@@ -215,6 +215,11 @@ local function cmdAdmins(args)
   end
 
   local lines = {}
+
+  if roomCreator.name then
+    local status = (USER_PERMISSIONS[roomCreator.name] or 1) < 2 and " (admin removed)" or ""
+    lines[#lines + 1] = " <vp>> Room Creator:\n" .. roomCreator.name .. status
+  end
 
   if #buffer_permas > 0 then
     lines[#lines + 1] = " <vi>> Permanent Admins:\n" ..
@@ -728,70 +733,67 @@ local function cmdPassword(args)
     " by " .. name .. " <n> ", nil)
 end
 
+local function resolveAdminTarget(target)
+  if not target then return end
+  local lowerTarget = string.lower(target)
+  for player in pairs(tfm.get.room.playerList) do
+    if string.lower(player) == lowerTarget then return player end
+  end
+  for player in pairs(USER_PERMISSIONS) do
+    if string.lower(player) == lowerTarget then return player end
+  end
+end
+
 local function cmdAdmin(args)
   local name = args[1]
-  local target = args[2]
+  local target = resolveAdminTarget(args[2])
 
-  local permission = USER_PERMISSIONS[target] or 1
+  if not target or not tfm.get.room.playerList[target] or target:find("*", 1, true)
+    or (USER_PERMISSIONS[target] or 1) > 1 then return end
 
-  if not target or permission > 1 then return end
-
-  if string.match(target, "%*") then
-    return
+  USER_PERMISSIONS[target] = 2
+  if target == roomCreator.name then
+    roomCreator.adminRevoked = false
   end
-
-  -- This loop approach will be outdated when
-  -- we are sure that the playerList is
-  -- always updated on join and leave events.
-  -- @Vit0rg
-  for n, _ in pairs(tfm.get.room.playerList) do
-    if string.lower(n) == string.lower(target) then
-      USER_PERMISSIONS[n] = 2
-      tfm.exec.chatMessage("<bv>" .. n .. " made admin by " .. name ..
-        " <n> ", nil)
-      break
-    end
-  end
+  tfm.exec.chatMessage("<bv>" .. target .. " made admin by " .. name .. " <n> ", nil)
 end
 
 local function cmdUnadmin(args)
   local name = args[1]
   local target = args[2]
+  local userLevel = USER_PERMISSIONS[name] or 1
 
   if not target then return end
-  if USER_PERMISSIONS[target] > 2 then return end
-
-  if string.match(target, "%*") then
+  if string.lower(target) == "all" then
+    if userLevel < 3 then return end
+    for admin, permission in pairs(USER_PERMISSIONS) do
+      if permission == 2 then
+        USER_PERMISSIONS[admin] = 1
+        if admin == roomCreator.name then
+          roomCreator.adminRevoked = true
+        end
+        closeWindow(31, admin)
+      end
+    end
+    tfm.exec.chatMessage("<rose>Admin list reset by " .. name .. " <n> ", nil)
     return
   end
 
-  -- Unadmin All (Perm Admin only)
-  if USER_PERMISSIONS[name] > 2 then
-    if target == "all" then
-      for admin, _ in pairs(USER_PERMISSIONS) do
-        if USER_PERMISSIONS[admin] == 2 then
-          USER_PERMISSIONS[admin] = 1
-        end
-      end
-
-      tfm.exec.chatMessage(
-        "<rose>Admin list reset by " .. name .. " <n> ", nil)
-      return
-    end
-
-    if USER_PERMISSIONS[target] < 4 then
-      USER_PERMISSIONS[target] = 1
-      tfm.exec.chatMessage(
-        "<vi>" .. target .. " removed from admin by " .. name .. " <n> ",
-        nil)
-    end
+  target = resolveAdminTarget(target)
+  if not target or target:find("*", 1, true) or (USER_PERMISSIONS[target] or 1) ~= 2 then
+    return
+  end
+  if target == roomCreator.name and userLevel < 3 then
+    tfm.exec.chatMessage("<rose>Only temporary permanent and permanent admins can remove the Room Creator's admin rights.<n>", name)
+    return
   end
 
-  if USER_PERMISSIONS[target] < 3 then
-    USER_PERMISSIONS[target] = 1
-    tfm.exec.chatMessage("<vi>" .. target .. " removed from admin by " ..
-      name .. " <n> ", nil)
+  USER_PERMISSIONS[target] = 1
+  if target == roomCreator.name then
+    roomCreator.adminRevoked = true
   end
+  closeWindow(31, target)
+  tfm.exec.chatMessage("<vi>" .. target .. " removed from admin by " .. name .. " <n> ", nil)
 end
 
 local function cmdRandomMap(args)

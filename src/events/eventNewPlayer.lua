@@ -138,6 +138,8 @@ function eventNewPlayer(name)
     tfm.exec.kickPlayer(name)
   end
 
+  assignRoomCreator(name)
+
   if isPlayerDead[name] == nil then
     isPlayerDead[name] = false
   end

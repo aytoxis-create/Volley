@@ -76,14 +76,8 @@ else
   trad = lang.en
 end
 
-local regex = "#volley%d+([%+_]*[%w_#]+)"
-local getRoomAdmin = string.match(tfm.get.room.name, regex)
-
-if getRoomAdmin ~= nil then
-  USER_PERMISSIONS[getRoomAdmin] = 2
-else
-  getRoomAdmin = ''
-end
+-- Session ownership is separate from the existing permission levels.
+local roomCreator = { name = nil, adminRevoked = false, selectionClosed = false }
 
 tfm.exec.disableAutoShaman(true)
 tfm.exec.disableAutoNewGame(true)

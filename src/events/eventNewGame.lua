@@ -5,6 +5,14 @@ function eventNewGame()
     lobbyMapConfig()
     print(USER_PERMISSIONS)
     firstRun = false
+    if roomCreator.pendingName then
+      local pendingName = roomCreator.pendingName
+      roomCreator.pendingName = nil
+      assignRoomCreator(pendingName)
+    end
+    if not roomCreator.name then
+      initializeRoomCreator()
+    end
   end
 
   if mode == "gameStart" then
