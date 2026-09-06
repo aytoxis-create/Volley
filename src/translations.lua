@@ -253,3 +253,29 @@ lang.ar.profile = {
   roles = { "لاعب", "مشرف", "مشرف دائم مؤقت", "مشرف دائم غير نشط", "مشرف دائم" },
   notFound = "اللاعب غير موجود في جلسة الغرفة الحالية.", ambiguous = "هناك عدة لاعبين بهذا الاسم. استخدم Name#0000."
 }
+
+lang.en.ranking = {
+  title = "ROOM RANKING", you = "Your rank", player = "Player · click to view profile", matches = "Matches", rate = "Win %",
+  players = "%d ranked players", teamWins = "Wins by team", teams = { "Red", "Blue", "Yellow", "Green" },
+  empty = "No matches played in this mode yet.", findMe = "Find my position"
+}
+lang.fr.ranking = {
+  title = "CLASSEMENT DU SALON", you = "Ta position", player = "Joueur · cliquer pour voir le profil", matches = "Matchs", rate = "Victoire %",
+  players = "%d joueurs classés", teamWins = "Victoires par équipe", teams = { "Rouge", "Bleu", "Jaune", "Vert" },
+  empty = "Aucun match joué dans ce mode pour le moment.", findMe = "Trouver ma position"
+}
+lang.br.ranking = {
+  title = "CLASSIFICAÇÃO DA SALA", you = "Sua posição", player = "Jogador · clique para ver o perfil", matches = "Partidas", rate = "Vitória %",
+  players = "%d jogadores classificados", teamWins = "Vitórias por equipe", teams = { "Verm.", "Azul", "Amar.", "Verde" },
+  empty = "Nenhuma partida jogada neste modo ainda.", findMe = "Encontrar minha posição"
+}
+lang.pl.ranking = {
+  title = "RANKING POKOJU", you = "Twoja pozycja", player = "Gracz · kliknij, aby zobaczyć profil", matches = "Mecze", rate = "Wygrane %",
+  players = "%d sklasyfikowanych graczy", teamWins = "Wygrane drużyn", teams = { "Czerw.", "Nieb.", "Żółty", "Ziel." },
+  empty = "Nie rozegrano jeszcze meczów w tym trybie.", findMe = "Znajdź moją pozycję"
+}
+lang.ar.ranking = {
+  title = "ترتيب الغرفة", you = "ترتيبك", player = "اللاعب · اضغط لعرض الملف", matches = "مباريات", rate = "الفوز %",
+  players = "%d لاعبين مصنفين", teamWins = "انتصارات الفرق", teams = { "أحمر", "أزرق", "أصفر", "أخضر" },
+  empty = "لم تلعب أي مباريات في هذا الوضع بعد.", findMe = "اعثر على ترتيبي"
+}

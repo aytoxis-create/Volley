@@ -1,4 +1,6 @@
 function removeUITrophies(name)
+  if not profileState[name] and not isOpenProfile[name] and #(playerAchievementsImages[name] or {})==0 then return end
+  clubhouse.clear(name, "profile")
   isOpenProfile[name] = false
 
   if profileState[name] then
@@ -18,4 +20,5 @@ function removeUITrophies(name)
   end
 
   playerAchievementsImages[name] = {}
+  clubhouse.restoreLobbyControls(name)
 end

@@ -1,4 +1,5 @@
 function closeAllWindows(name)
+  clubhouse.clearPanels(name)
   openRank[name] = false
   selectMapOpen[name] = false
   selectMapPage[name] = 1

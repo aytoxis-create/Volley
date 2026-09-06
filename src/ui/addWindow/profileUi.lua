@@ -21,9 +21,10 @@ function resolveProfileTarget(query)
   return nil, count > 1 and "ambiguous" or "notFound"
 end
 
-local function profileArea(id, text, name, x, y, width, height, color, alpha)
+local function profileArea(id, text, name, x, y, width, height, color, alpha, border)
+  if clubhouse.images[clubhouse.interiors.profile] then alpha = 0 end
   ui.addTextArea(id, text, name, x, y, width, height, color or 0x142B2E,
-    color or 0x142B2E, alpha or 0, true)
+    border or color or 0x142B2E, alpha or 0, true)
 end
 
 function updateProfileMode(name, index)
@@ -43,18 +44,24 @@ function updateProfileMode(name, index)
       if player.name == state.target then position = "#" .. rank; break end
     end
   end
-  profileArea(8705, "<p align='right'><font size='28' color='#DEC18A'>" .. position .. "</font></p>", name, 580, 59, 125, 37)
-  profileArea(8706, "<p align='right'><font size='10' color='#A9BCB4'>" .. (matches > 0 and text.rank or text.unranked) .. "</font></p>", name, 540, 98, 165, 20)
+  profileArea(8707, "", name, 574, 68, 132, 54, 0x102323, 1, 0x795D36)
+  profileArea(8705, "<p align='center'><font face='Georgia' size='26' color='#DEC18A'>" .. position .. "</font></p>", name, 580, 68, 120, 33)
+  profileArea(8706, "<p align='center'><font size='10' color='#ADAB94'>" .. (matches > 0 and text.rank or text.unranked) .. "</font></p>", name, 580, 100, 120, 17)
   for i, label in ipairs(text.modes) do
     local selected = index == i
-    profileArea(8709 + i, "<p align='center'><font size='11' color='" .. (selected and "#E3ECE7" or "#A9BCB4") .. "'><a href='event:profileMode" .. i .. "'>" .. label .. "</a></font></p>",
-      name, 94 + (i - 1) * 123, 134, 114, 23, selected and 0x305048 or 0x142B2E, 1)
+    if selected then label = "<b>" .. label .. "</b>" end
+    profileArea(8709 + i, "<p align='center'><font size='11' color='" .. (selected and "#F7D99A" or "#C4BAA2") .. "'><a href='event:profileMode" .. i .. "'>" .. label .. "</a></font></p>",
+      name, 94 + (i - 1) * 123, 136, 114, 21, selected and 0x29352A or 0x102323, 1, selected and 0xB58A46 or 0x4C4834)
   end
   local labels = { text.matches, text.wins, text.rate }
   local values = { matches, wins, matches > 0 and (math.floor(wins * 100 / matches + 0.5) .. "%") or "—" }
   for i = 1, 3 do
-    profileArea(8714 + i, "<font size='10' color='#A9BCB4'>" .. labels[i] .. "</font><br><font size='25' color='#E3ECE7'>" .. values[i] .. "</font>",
-      name, 94 + (i - 1) * 211, 170, 190, 51)
+    -- Position the caption and value independently of mixed-font line metrics.
+    local x = 100 + (i - 1) * 211
+    profileArea(8714 + i, "<p align='center'><font size='10' color='#C4BAA2'>" .. labels[i] .. "</font></p>",
+      name, x, 174, 178, 18)
+    profileArea(8699 + i, "<p align='center'><font face='Georgia' size='23' color='#F2E5CD'>" .. values[i] .. "</font></p>",
+      name, x, 185, 178, 32)
   end
 end
 
@@ -69,10 +76,11 @@ function showProfileTrophy(name, index)
   if not description or description == "" then description = text.trophy .. " " .. index end
   local quantity = trophy.quantity or 0
   local detail = quantity > 0 and string.format(text.quantity, quantity) or text.locked
-  profileArea(8719, "<font size='10' color='#E3ECE7'>" .. profileEscape(description) .. "</font><br><font size='10' color='#A9BCB4'>" .. detail .. "</font>", name, 94, 306, 475, 34)
+  profileArea(8719, "<font size='10' color='#F2E5CD'>" .. profileEscape(clubhouse.shorten(description, 65)) .. "</font>", name, 103, 306, 456, 17)
+  profileArea(8721, "<font size='9' color='#ADAB94'>" .. detail .. "</font>", name, 103, 318, 456, 15)
   ui.removeTextArea(8722, name)
   if state.target == name and quantity > 0 then
-    profileArea(8722, "<p align='right'><font size='11' color='#DEC18A'><a href='event:profileEquipTrophy'>" .. text.show .. "</a></font></p>", name, 585, 312, 120, 24)
+    profileArea(8722, "<p align='center'><font size='11' color='#DEC18A'><a href='event:profileEquipTrophy'>" .. text.show .. "</a></font></p>", name, 589, 312, 112, 24)
   end
 end
 
@@ -94,26 +102,30 @@ function profileUI(name, playerTarget)
   isOpenProfile[name] = true
   profileState[name] = { target = playerTarget }
   local text = getProfileText(name)
-  profileArea(8700, "", name, 70, 35, 660, 330, 0x142B2E, 1)
-  profileArea(8701, "", name, 71, 36, 658, 88, 0x1B3739, 1)
-  profileArea(8707, "", name, 70, 35, 660, 2, 0xDEC18A, 1)
-  profileArea(8702, "<font size='10' color='#DEC18A'>#VOLLEY / " .. text.title .. "</font>", name, 94, 47, 420, 20)
+  clubhouse.panel(name, "profile")
   local nick, tag = playerTarget:match("^(.-)(#%d+)$")
-  profileArea(8703, "<font size='21' color='#E3ECE7'>" .. profileEscape(nick or playerTarget) .. "</font><font size='11' color='#A9BCB4'>" .. profileEscape(tag or "") .. "</font>", name, 94, 68, 430, 30)
+  profileArea(8703, "<font face='Georgia' size='23' color='#F2E5CD'>" .. profileEscape(clubhouse.shorten(nick or playerTarget, 28)) .. "</font><font size='11' color='#ADAB94'>" .. profileEscape(tag or "") .. "</font>", name, 94, 68, 430, 30)
   local level = USER_PERMISSIONS[playerTarget] or 1
   local role = text.roles[level] or text.roles[1]
-  if roomCreator.name == playerTarget then role = "Room Creator · " .. role end
-  profileArea(8704, "<font size='10' color='#DEC18A'>" .. role .. "</font>", name, 94, 102, 435, 19)
-  profileArea(8708, "<p align='right'><font size='11' color='#E3ECE7'><a href='event:profileClose'>" .. text.close .. " ×</a></font></p>", name, 622, 39, 94, 20)
+  local roleColors = tfm.exec.chatMessage_colors
+  local roleTag = ({[2]="ch", [3]="j", [4]="vi", [5]="vi"})[level] or "n"
+  local roleLabel = "<font size='10' color='" .. roleColors[roleTag] .. "'>" .. role .. "</font>"
+  if roomCreator.name == playerTarget then
+    roleLabel = "<font size='10' color='" .. roleColors.vp .. "'>Room Creator · </font>" .. roleLabel
+  end
+  if playerTarget == "Myzk#5789" or playerTarget == "Refletz#6472" then
+    local developerKey = playerTarget == "Refletz#6472" and "profile.developer_main" or "profile.developer_second"
+    roleLabel = "<font size='10' color='#000000'>" .. clubhouse.escape(clubhouse.text(name, developerKey)) .. "</font>"
+  end
+  profileArea(8704, roleLabel, name, 94, 102, 435, 19)
   local collected = 0
   local ids = { 27, 28, 29, 32, 33, 34 }
   for i = 1, 6 do
     if (playerAchievements[playerTarget][i].quantity or 0) > 0 then collected = collected + 1 end
     ui.addTrophie(ids[i], "trophie" .. i, name, playerTarget, 94 + (i - 1) * 106, 250, 82, 50, 1)
   end
-  profileArea(8718, "<font size='12' color='#E3ECE7'>" .. text.trophies .. "</font><font size='10' color='#A9BCB4'>   " .. collected .. "/6</font>", name, 94, 227, 600, 20)
-  profileArea(8721, "", name, 94, 222, 611, 1, 0x395753, 1)
-  profileArea(8720, "<font size='10' color='#A9BCB4'>" .. text.session .. "</font>", name, 94, 343, 610, 18)
+  profileArea(8718, "<font face='Georgia' size='11' color='#DEC18A'>" .. text.trophies .. "</font><font size='10' color='#ADAB94'>   " .. collected .. "/6</font>", name, 109, 228, 576, 18)
+  profileArea(8720, "<font size='10' color='#ADAB94'>" .. text.session .. "</font>", name, 94, 333, 610, 18)
   local index = gameStats.twoTeamsMode and 2 or gameStats.threeTeamsMode and 3 or gameStats.teamsMode and 4 or gameStats.realMode and 5 or 1
   updateProfileMode(name, index)
   showProfileTrophy(name, 1)

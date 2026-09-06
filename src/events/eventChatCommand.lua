@@ -193,6 +193,7 @@ local function cmdLang(args)
 
   if translations[langCode] then
     playerLanguage[name].tr = translations[langCode]
+    clubhouse.refresh(name)
   end
 end
 
@@ -1124,8 +1125,7 @@ end
 local function cmdSettings(args)
   local name = args[1]
 
-  closeRankingUI(name)
-  removeUITrophies(name)
+  closeAllWindows(name)
   settings[name] = true
   updateSettingsUI(name)
 end
@@ -1554,5 +1554,8 @@ function eventChatCommand(name, c)
 
 
   args[#args + 1] = cmdName
+  if handler==cmdProfile or handler==cmdLang or handler==cmdSettings or handler==cmdListSync then
+    if not clubhouse.allowInput(name,false) then return end
+  end
   handler(args)
 end

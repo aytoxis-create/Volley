@@ -1,115 +1,41 @@
 function showTheScore()
+  clubhouse.clear(nil,"score")
+  if mode ~= "gameStart" then return end
+  -- Retire the old map-relative score textareas, including Real Mode counters.
+  for _,id in ipairs({0,1,899899,8998991}) do ui.removeTextArea(id) end
+  local colors = {red="#E85A71",blue="#4BA9EF",yellow="#E5CC4B",green="#49CF82"}
+  local tagColors = {["<r>"]=colors.red,["<bv>"]=colors.blue,["<j>"]=colors.yellow,["<vp>"]=colors.green}
+  local entries = {}
+  local function add(value,color,x,detail,detailX)
+    entries[#entries+1] = {value=value,color=color,x=x,detail=detail,detailX=detailX}
+  end
   if gameStats.realMode then
-    ui.addTextArea(0, "<p align='center'><font size='40px'><r>" .. teamsScores['red'] .. "<n>", nil, 1150, 20, 100, 100,
-      0x161616, 0x161616, 0, false)
-    ui.addTextArea(1, "<p align='center'><font size='40px'><bv>" .. teamsScores['blue'] .. "<n>", nil, 1350, 20, 100, 100,
-      0x161616, 0x161616, 0, false)
-    ui.addTextArea(899899,
-      "<p align='center'><font size='20px'><b><r>" .. gameStats.redQuantitySpawn ..
-      "/" .. gameStats.redLimitSpawn .. "<n></b>", nil, 200, 20, 100, 100, 0x161616, 0x161616, 0, true)
-    ui.addTextArea(8998991,
-      "<p align='center'><font size='20px'><b><bv>" ..
-      gameStats.blueQuantitySpawn .. "/" .. gameStats.blueLimitSpawn .. "<n></b>", nil, 600, 20, 100, 100, 0x161616,
-      0x161616, 0, true)
-    return
-  end
-  if gameStats.twoTeamsMode then
-    ui.addTextArea(899899, "<p align='center'><font size='40px'><bv>" .. teamsScores['blue'] .. "<n>", nil, 200, 20, 100,
-      100, 0x161616, 0x161616, 0, false)
-    ui.addTextArea(0, "<p align='center'><font size='40px'><r>" .. teamsScores['red'] .. "<n>", nil, 550, 20, 100, 100,
-      0x161616, 0x161616, 0, false)
-    ui.addTextArea(1, "<p align='center'><font size='40px'><bv>" .. teamsScores['blue'] .. "<n>", nil, 950, 20, 100, 100,
-      0x161616, 0x161616, 0, false)
-    ui.addTextArea(8998991, "<p align='center'><font size='40px'><r>" .. teamsScores['red'] .. "<n>", nil, 1300, 20, 100,
-      100, 0x161616, 0x161616, 0, false)
-
-    return
-  end
-  if gameStats.threeTeamsMode and gameStats.typeMap == "large4v4" then
-    -- teamsLifes = { [1] = { red = 5 }, [2] = { blue = 5 }, [3] = { green = 5 } }
-    ui.addTextArea(0, "<p align='center'><font size='40px'><r>" .. teamsLifes[2].red .. "<n>", nil, 350, 20, 100, 100,
-      0x161616, 0x161616, 0, false)
-    ui.addTextArea(1, "<p align='center'><font size='40px'><bv>" .. teamsLifes[3].blue .. "<n>", nil, 850, 20, 100, 100,
-      0x161616, 0x161616, 0, false)
-    ui.addTextArea(8998991, "<p align='center'><font size='40px'><vp>" .. teamsLifes[4].green .. "<n>", nil, 1350, 20,
-      100, 100, 0x161616, 0x161616, 0, false)
-
-    return
-  elseif gameStats.threeTeamsMode and gameStats.typeMap == "large3v3" then
-    if getTeamsLifes[1] == nil or getTeamsLifes[2] == nil then
-      return
+    add(teamsScores.red,colors.red,1150,gameStats.redQuantitySpawn.."/"..gameStats.redLimitSpawn,200)
+    add(teamsScores.blue,colors.blue,1350,gameStats.blueQuantitySpawn.."/"..gameStats.blueLimitSpawn,600)
+  elseif gameStats.twoTeamsMode then
+    -- Preserve the original score position in each of the four courts.
+    add(teamsScores.blue,colors.blue,200)
+    add(teamsScores.red,colors.red,550)
+    add(teamsScores.blue,colors.blue,950)
+    add(teamsScores.red,colors.red,1300)
+  elseif gameStats.threeTeamsMode or gameStats.teamsMode then
+    if gameStats.typeMap == "large4v4" then
+      if gameStats.teamsMode then add(teamsLifes[1].yellow,colors.yellow,200) end
+      add(teamsLifes[2].red,colors.red,gameStats.teamsMode and 550 or 350)
+      add(teamsLifes[3].blue,colors.blue,gameStats.teamsMode and 950 or 850)
+      add(teamsLifes[4].green,colors.green,gameStats.teamsMode and 1300 or 1350)
+    else
+      local count = gameStats.teamsMode and gameStats.typeMap == "large3v3" and 3 or 2
+      local positions = gameStats.typeMap == "small" and {0,700} or count == 3 and {200,550,900} or {200,900}
+      for i=1,count do
+        if getTeamsLifes[i] == nil or getTeamsColors[i] == nil then return end
+        add(getTeamsLifes[i],tagColors[getTeamsColors[i]] or "#E3ECE7",positions[i])
+      end
     end
-    if getTeamsColors[1] == nil or getTeamsColors[2] == nil then
-      return
-    end
-
-    ui.removeTextArea(1)
-    ui.removeTextArea(8998991)
-
-    ui.addTextArea(899899, "<p align='center'><font size='40px'>" .. getTeamsColors[1] .. "" .. getTeamsLifes[1] .. "<n>",
-      nil, 200, 20, 100, 100, 0x161616, 0x161616, 0, false)
-    ui.addTextArea(0, "<p align='center'><font size='40px'>" .. getTeamsColors[2] .. "" .. getTeamsLifes[2] .. "<n>", nil,
-      900, 20, 100, 100, 0x161616, 0x161616, 0, false)
-
-    return
-  end
-
-  if gameStats.teamsMode and gameStats.typeMap == "large4v4" then
-    ui.addTextArea(899899, "<p align='center'><font size='40px'><j>" .. teamsLifes[1].yellow .. "<n>", nil, 200, 20, 100,
-      100, 0x161616, 0x161616, 0, false)
-    ui.addTextArea(0, "<p align='center'><font size='40px'><r>" .. teamsLifes[2].red .. "<n>", nil, 550, 20, 100, 100,
-      0x161616, 0x161616, 0, false)
-    ui.addTextArea(1, "<p align='center'><font size='40px'><bv>" .. teamsLifes[3].blue .. "<n>", nil, 950, 20, 100, 100,
-      0x161616, 0x161616, 0, false)
-    ui.addTextArea(8998991, "<p align='center'><font size='40px'><vp>" .. teamsLifes[4].green .. "<n>", nil, 1300, 20,
-      100, 100, 0x161616, 0x161616, 0, false)
-    return
-  end
-
-  if gameStats.teamsMode and gameStats.typeMap == "large3v3" then
-    if getTeamsLifes[1] == nil or getTeamsLifes[2] == nil or getTeamsLifes[3] == nil then
-      return
-    end
-    if getTeamsColors[1] == nil or getTeamsColors[2] == nil or getTeamsColors[3] == nil then
-      return
-    end
-    ui.addTextArea(899899, "<p align='center'><font size='40px'>" .. getTeamsColors[1] .. "" .. getTeamsLifes[1] .. "<n>",
-      nil, 200, 20, 100, 100, 0x161616, 0x161616, 0, false)
-    ui.addTextArea(0, "<p align='center'><font size='40px'>" .. getTeamsColors[2] .. "" .. getTeamsLifes[2] .. "<n>", nil,
-      550, 20, 100, 100, 0x161616, 0x161616, 0, false)
-    ui.addTextArea(1, "<p align='center'><font size='40px'>" .. getTeamsColors[3] .. "" .. getTeamsLifes[3] .. "<n>", nil,
-      900, 20, 100, 100, 0x161616, 0x161616, 0, false)
-    return
-  end
-
-  if gameStats.teamsMode and gameStats.typeMap == "small" then
-    if getTeamsLifes[1] == nil or getTeamsLifes[2] == nil then
-      return
-    end
-    if getTeamsColors[1] == nil or getTeamsColors[2] == nil then
-      return
-    end
-    ui.addTextArea(0, "<p align='center'><font size='40px'>" .. getTeamsColors[1] .. "" .. getTeamsLifes[1] .. "<n>", nil,
-      0, 20, 100, 100, 0x161616, 0x161616, 0, false)
-    ui.addTextArea(1, "<p align='center'><font size='40px'>" .. getTeamsColors[2] .. "" .. getTeamsLifes[2] .. "<n>", nil,
-      700, 20, 100, 100, 0x161616, 0x161616, 0, false)
-    return
-  end
-
-  if gameStats.gameMode == "3v3" then
-    ui.addTextArea(0, "<p align='center'><font size='40px'><r>" .. teamsScores['red'] .. "<n>", nil, 0, 20, 100, 100,
-      0x161616, 0x161616, 0, false)
-    ui.addTextArea(1, "<p align='center'><font size='40px'><bv>" .. teamsScores['blue'] .. "<n>", nil, 700, 20, 100, 100,
-      0x161616, 0x161616, 0, false)
-  elseif gameStats.gameMode == "4v4" then
-    ui.addTextArea(0, "<p align='center'><font size='40px'><r>" .. teamsScores['red'] .. "<n>", nil, 200, 20, 100, 100,
-      0x161616, 0x161616, 0, false)
-    ui.addTextArea(1, "<p align='center'><font size='40px'><bv>" .. teamsScores['blue'] .. "<n>", nil, 900, 20, 100, 100,
-      0x161616, 0x161616, 0, false)
   else
-    ui.addTextArea(0, "<p align='center'><font size='40px'><r>" .. teamsScores['red'] .. "<n>", nil, 200, 20, 100, 100,
-      0x161616, 0x161616, 0, false)
-    ui.addTextArea(1, "<p align='center'><font size='40px'><bv>" .. teamsScores['blue'] .. "<n>", nil, 1500, 20, 100, 100,
-      0x161616, 0x161616, 0, false)
+    local positions = gameStats.gameMode == "3v3" and {0,700} or gameStats.gameMode == "4v4" and {200,900} or {200,1500}
+    add(teamsScores.red,colors.red,positions[1])
+    add(teamsScores.blue,colors.blue,positions[2])
   end
+  clubhouse.drawScores(entries)
 end

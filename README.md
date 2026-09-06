@@ -39,6 +39,25 @@ The card shows the player's role, matches, victories, win rate and room rank for
 
 Click a trophy to inspect its description and the viewed player's collection count. On your own profile, an earned trophy can still be displayed above your mouse using **Show trophy**. Mode tabs keep the same viewed player and do not reload trophy images. Closing with `P` or **Close**, opening another panel, and leaving the room clean up the profile.
 
+## Room ranking
+
+- Press `L` or use the menu to open the room ranking; press `L` again or click Close to dismiss it.
+- Five mode tabs share the profile's visual style and show session matches, victories, win rate and wins by team. Rankings keep the existing order: most wins first, then fewer matches.
+- Browse eight players per page in every mode, including 3 teams, without the old 30-player limit. Your position is highlighted and Find my position opens your page.
+- Click a player name to view their profile. Only players with matches in the current room session are ranked; no global or persistent ranking is implied.
+
+## Clubhouse interface
+
+The lobby, team slots, menu, settings, map/ball selectors, profile, ranking, help, credits, Real Mode rules, synchronization chooser and victory display use the hosted Clubhouse assets. All 82 pack entries are mapped to 79 uploads by exact decoded image comparison; identical Menu titles reuse their upload. The podium artwork is registered as an available asset but does not add a new gameplay screen.
+
+Map selection retains five cards with selection and voting. Ball selection has its own frame, larger name fields and selection only. Settings retain two pages with separate mode and court-size dropdowns. The five supported languages share a reviewed copy catalog and ten help pages each; player names, scores and actions remain dynamic text.
+
+Images and text areas are tracked per viewer and panel. Closing a panel, switching selectors, changing language, leaving the room and changing maps release their owned images. Modal panels hide the lobby's JOIN controls until they close. The lobby artwork uses a background layer so it does not conceal mice. See the [Atelier801 image-layer documentation](https://atelier801.com/topic?f=5&p=1&t=451587).
+
+Settings callbacks verify permissions and option indexes. The sync chooser handles zero to five candidates without indexing missing players. Existing Room Creator protection, profile lookup, trophies, ranking order and panel-opening cooldowns are preserved.
+
+Build with `npm run build` or `npm run minify`. Local checks cover Lua 5.1 compilation, interface transitions, all languages, selector permissions, JOIN layouts, trophy ownership, image cleanup and Room Creator permission scenarios. These checks use mocked Transformice APIs: visual layering, native font metrics and mouse interaction still require a client test.
+
 ## 💻 Project
 
 Volley is currently a semi-official Transformice module created to bring fun to people.

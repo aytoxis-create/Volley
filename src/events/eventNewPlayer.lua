@@ -148,6 +148,7 @@ function eventNewPlayer(name)
   tfm.exec.chatMessage(playerLanguage[name].tr.welcomeMessage, name)
 
   if mode == "startGame" then
+    clubhouse.lobby(name)
     eventNewGameShowLobbyTexts()
 
     ui.addWindow(30, "<p align='center'><font size='13px'><a href='event:selectMap'>Select a map/ball", name, 10, 370, 150, 30,

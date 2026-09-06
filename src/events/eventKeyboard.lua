@@ -40,10 +40,6 @@ local FORCE_CONFIG = {
 ]]
 local function cleanUpUI(name)
   closeAllWindows(name)
-  closeRankingUI(name)
-  removeButtons(25, name)
-  removeButtons(26, name)
-  removeUITrophies(name)
 end
 
 local function handleConsumables(name, key, x, y, offsetX)
@@ -264,6 +260,12 @@ function eventKeyboard(name, key, down, x, y, xv, yv)
   -- Shouldn't the player data be memoized?
   local player = tfm.get.room.playerList[name]
   if not player then return end
+  if clubhouse.pageInputKey(name,key,down) then return end
+  if key == KEYS.PROFILE or key == KEYS.RANK then
+    if not down then return end
+    local closing=key==KEYS.PROFILE and isOpenProfile[name] or key==KEYS.RANK and openRank[name]
+    if not clubhouse.allowInput(name,closing) then return end
+  end
 
   -- 1. Movement & Offset Calculation
   local _offsets = { x = players[name].offsets.x, y = players[name].offsets.y }
@@ -285,10 +287,7 @@ function eventKeyboard(name, key, down, x, y, xv, yv)
 
     -- Closing is instant; opening has a 2s anti-spam cooldown (spamming crashed the script)
     if wasOpen then
-      cleanUpUI(name)
-      closeWindow(24, name)
-      closeWindow(25, name)
-      isOpenProfile[name] = false
+      removeUITrophies(name)
       return
     end
     if profileKeyTime[name] and os.time() - profileKeyTime[name] < 2000 then return end
@@ -302,23 +301,9 @@ function eventKeyboard(name, key, down, x, y, xv, yv)
   -- 4. Rank Key (L)
   if key == KEYS.RANK then
     if openRank[name] then
-      -- Closing is instant
-      openRank[name] = false
-      cleanUpUI(name)
-      ui.removeTextArea(99992, name)
-      closeWindow(266, name)
+      closeRankingUI(name)
     else
-      -- Opening has a 2s anti-spam cooldown
-      if rankKeyTime[name] and os.time() - rankKeyTime[name] < 2000 then return end
-      rankKeyTime[name] = os.time()
-
-      openRank[name] = true
-      ui.addWindow(24, "<p align='center'><font size='16px'>", name, 125, 60, 650, 300, 1, false, true,
-        playerLanguage[name].tr.closeUIText)
-      ui.addTextArea(9999543, "<p align='center'>Room Ranking", name, 17, 168, 100, 20, 0x142b2e, 0x8a583c, 1, true)
-      ui.addTextArea(9999544, "<p align='center'><n2>Global Ranking<n>", name, 17, 268, 100, 18, 0x142b2e, 0x8a583c, 1,
-        true)
-      showMode(playerRankingMode[name], name)
+      openRankingUI(name)
     end
     return
   end

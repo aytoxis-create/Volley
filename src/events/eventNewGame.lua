@@ -1,4 +1,5 @@
 function eventNewGame()
+  clubhouse.newGame()
   if firstRun then
     print('first run')
     initUsersPermissions()
