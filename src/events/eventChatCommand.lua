@@ -352,26 +352,17 @@ end
 
 local function cmdProfile(args)
   local name = args[1]
-  local target = args[2]
-
-  -- Update the Buttons with the id variable later,
-  -- not a magical number. @Vit0rg
-  closeRankingUI(name)
-  removeButtons(25, name)
-  removeButtons(26, name)
-  removeUITrophies(name)
-
+  -- The dispatcher appends the command/alias as the last argument.
+  local query = #args > 2 and args[2] or name
+  local target, reason = resolveProfileTarget(query)
   if not target then
-    profileUI(name, name)
+    tfm.exec.chatMessage("<rose>" .. getProfileText(name)[reason] .. "<n>", name)
     return
   end
-
-  for n, _ in pairs(playerAchievements) do
-    if string.lower(n) == string.lower(target) then
-      profileUI(name, n)
-      break
-    end
-  end
+  if profileKeyTime[name] and os.time() - profileKeyTime[name] < 2000 then return end
+  profileKeyTime[name] = os.time()
+  closeAllWindows(name)
+  profileUI(name, target)
 end
 
 local function cmdDiscord(args)

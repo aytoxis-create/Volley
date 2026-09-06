@@ -1,20 +1,17 @@
 function ui.addTrophie(id, event, player, playerTarget, x, y, width, height, alpha)
-  local indexImage = tonumber(string.sub(event, 8))
+  local index = tonumber(event:sub(8))
+  local trophy = playerAchievements[playerTarget] and playerAchievements[playerTarget][index]
+  if not trophy then return end
   id = tostring(id)
-  ui.addTextArea(id .. "0", "", player, x + 1, y + 1, width - 2, height - 2, 0x8a583c, 0x8a583c, alpha, true)
-  ui.addTextArea(id .. "00", "", player, x + 3, y + 3, width - 6, height - 6, 0x2b1f19, 0x2b1f19, alpha, true)
-  ui.addTextArea(id .. "000", "", player, x + 4, y + 4, width - 8, height - 8, 0xc191c, 0xc191c, alpha, true)
-  ui.addTextArea(id .. "0000", "", player, x + 5, y + 5, width - 10, height - 10, 0x2d5a61, 0x2d5a61, alpha, true)
-  ui.addTextArea(id .. "0000000", "", player, x + 5, y + 6, width - 10, height - 12, 0x142b2e, 0x142b2e, alpha, true)
-  table.insert(playerAchievementsImages[player],
-    tfm.exec.addImage(playerAchievements[playerTarget][indexImage].image, "~" .. id .. "0000000", x + 5, y + 7, player))
-  ui.addTextArea(id .. "00000",
-    "<p align='right'><font size='10px'><font color='#000000'>x" ..
-    playerAchievements[playerTarget][indexImage].quantity .. "", player, x + 33, y + height - 16, 20, 15, 0x161616,
-    0x161616, 0, true)
-  ui.addTextArea(id .. "000000",
-    "<p align='right'><font size='10px'>x" .. playerAchievements[playerTarget][indexImage].quantity .. "", player, x + 32,
-    y + height - 17, 20, 15, 0x161616, 0x161616, 0, true)
-  ui.addTextArea(id .. "00000000", "<a href='event:" .. event .. "'><font size='20px'><br> <br> </a>", player, x + 5, y +
-    6, width, height, 0x142b2e, 0x142b2e, 0, true)
+  local quantity = trophy.quantity or 0
+  local border = quantity > 0 and 0x8D805F or 0x395753
+  ui.addTextArea(id .. "0", "", player, x, y, width, height, 0x1B3739, border, alpha, true)
+  ui.addTextArea(id .. "0000000", "", player, x + 1, y + 1, width - 2, height - 2, 0x1B3739, 0x1B3739, alpha, true)
+  if trophy.image then
+    table.insert(playerAchievementsImages[player], tfm.exec.addImage(trophy.image, "~" .. id .. "0000000", x + (width - 40) / 2, y + 3, player))
+  end
+  local color = quantity > 0 and "#DEC18A" or "#A9BCB4"
+  ui.addTextArea(id .. "00000", "<p align='right'><font size='10' color='" .. color .. "'><a href='event:" .. event .. "'>×" .. quantity .. "</a></font></p>",
+    player, x + width - 27, y + height - 17, 25, 16, 0, 0, 0, true)
+  ui.addTextArea(id .. "00000000", "<a href='event:" .. event .. "'><font size='20'><br> <br> </font></a>", player, x, y, width, height, 0, 0, 0, true)
 end

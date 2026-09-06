@@ -126,6 +126,33 @@ local function handleRealMode(name, key, x)
   return true -- Allow execution to continue
 end
 
+local function getPlayerTransformColor(name)
+  -- Remaining teams keep their colors when the court shrinks after elimination.
+  if (gameStats.teamsMode or gameStats.threeTeamsMode)
+    and (gameStats.typeMap == "large3v3" or gameStats.typeMap == "small") then
+    for index, team in ipairs(teamsPlayersOnGame) do
+      for _, player in ipairs(team) do
+        if player.name == name then
+          return getTeamsColorsName[index] or 0x81348A
+        end
+      end
+    end
+  end
+
+  local teams = {
+    { playersRed, 0xEF4444 },
+    { playersBlue, 0x3B82F6 },
+    { playersYellow, 0xF59E0B },
+    { playersGreen, 0x109267 }
+  }
+  for _, team in ipairs(teams) do
+    for _, player in ipairs(team[1]) do
+      if player.name == name then return team[2] end
+    end
+  end
+  return 0x81348A
+end
+
 local function handlePlayerTransform(name, x, y)
   local additionalForce = 0
   playerPressSpace[name] = true
@@ -187,7 +214,7 @@ local function handlePlayerTransform(name, x, y)
     height = height,
     restitution = gameStats.physicObjectForce + additionalForce,
     friction = 0,
-    color = 0x81348A,
+    color = getPlayerTransformColor(name),
     miceCollision = false,
     groundCollision = true
   })

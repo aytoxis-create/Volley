@@ -161,6 +161,7 @@ local playerAchievements = {}
 local playerAchievementsImages = {}
 local playerTrophyImage = {}
 local isOpenProfile = {}
+local profileState = {}
 local profileKeyTime = {}
 local rankKeyTime = {}
 local panelOpenTime = {}

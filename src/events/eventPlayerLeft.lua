@@ -1,4 +1,5 @@
 function eventPlayerLeft(name)
+  removeUITrophies(name)
   playerLeft[name] = true
   playerLastMatchCount[name] = countMatches
   playerCanTransform[name] = true

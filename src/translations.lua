@@ -212,3 +212,44 @@ lang.pl = {
   },
   mapSelect = 'Wybierz mapę'
 }
+
+lang.en.profile = {
+  title = "PLAYER PROFILE", modes = { "Normal", "2 teams", "3 teams", "4 teams", "Real" },
+  matches = "Matches played", wins = "Victories", rate = "Win rate", rank = "Room rank", unranked = "Unranked",
+  trophies = "Trophy showcase", trophy = "Trophy", quantity = "Collected %d time(s)", locked = "Not collected yet",
+  session = "Current room session", close = "Close", show = "Show trophy",
+  roles = { "Player", "Admin", "Temporary permanent admin", "Inactive permanent admin", "Permanent admin" },
+  notFound = "Player not found in this room session.", ambiguous = "Several players have this name. Use Name#0000."
+}
+lang.fr.profile = {
+  title = "PROFIL DU JOUEUR", modes = { "Normal", "2 équipes", "3 équipes", "4 équipes", "Real" },
+  matches = "Matchs joués", wins = "Victoires", rate = "Taux de victoire", rank = "Classement du salon", unranked = "Non classé",
+  trophies = "Vitrine de trophées", trophy = "Trophée", quantity = "Obtenu %d fois", locked = "Pas encore obtenu",
+  session = "Statistiques de la session du salon", close = "Fermer", show = "Montrer le trophée",
+  roles = { "Joueur", "Admin", "Tempo perma", "Perma inactif", "Perma" },
+  notFound = "Joueur introuvable dans cette session du salon.", ambiguous = "Plusieurs joueurs portent ce pseudo. Précise Nom#0000."
+}
+lang.br.profile = {
+  title = "PERFIL DO JOGADOR", modes = { "Normal", "2 equipes", "3 equipes", "4 equipes", "Real" },
+  matches = "Partidas jogadas", wins = "Vitórias", rate = "Taxa de vitórias", rank = "Posição na sala", unranked = "Sem classificação",
+  trophies = "Vitrine de troféus", trophy = "Troféu", quantity = "Obtido %d vez(es)", locked = "Ainda não obtido",
+  session = "Estatísticas da sessão da sala", close = "Fechar", show = "Mostrar troféu",
+  roles = { "Jogador", "Admin", "Admin permanente temporário", "Admin permanente inativo", "Admin permanente" },
+  notFound = "Jogador não encontrado nesta sessão da sala.", ambiguous = "Vários jogadores têm esse nome. Use Nome#0000."
+}
+lang.pl.profile = {
+  title = "PROFIL GRACZA", modes = { "Normalny", "2 drużyny", "3 drużyny", "4 drużyny", "Real" },
+  matches = "Rozegrane mecze", wins = "Zwycięstwa", rate = "Procent zwycięstw", rank = "Pozycja w pokoju", unranked = "Bez pozycji",
+  trophies = "Kolekcja trofeów", trophy = "Trofeum", quantity = "Zdobyto %d raz(y)", locked = "Jeszcze nie zdobyto",
+  session = "Statystyki bieżącej sesji pokoju", close = "Zamknij", show = "Pokaż trofeum",
+  roles = { "Gracz", "Admin", "Tymczasowy stały admin", "Nieaktywny stały admin", "Stały admin" },
+  notFound = "Nie znaleziono gracza w tej sesji pokoju.", ambiguous = "Kilku graczy ma tę nazwę. Użyj Nazwa#0000."
+}
+lang.ar.profile = {
+  title = "ملف اللاعب", modes = { "عادي", "فريقان", "3 فرق", "4 فرق", "Real" },
+  matches = "المباريات", wins = "الانتصارات", rate = "نسبة الفوز", rank = "ترتيب الغرفة", unranked = "غير مصنف",
+  trophies = "مجموعة الجوائز", trophy = "جائزة", quantity = "تم الحصول عليها %d مرة", locked = "لم يتم الحصول عليها بعد",
+  session = "إحصائيات جلسة الغرفة الحالية", close = "إغلاق", show = "عرض الجائزة",
+  roles = { "لاعب", "مشرف", "مشرف دائم مؤقت", "مشرف دائم غير نشط", "مشرف دائم" },
+  notFound = "اللاعب غير موجود في جلسة الغرفة الحالية.", ambiguous = "هناك عدة لاعبين بهذا الاسم. استخدم Name#0000."
+}

@@ -11,6 +11,16 @@ end
 
 function eventTextAreaCallback(id, name, c)
   if playerBan[name] then return end
+  if c == "profileClose" then
+    if profileState[name] then removeUITrophies(name) end
+    return
+  elseif c:sub(1, 11) == "profileMode" then
+    updateProfileMode(name, tonumber(c:sub(12)))
+    return
+  elseif c == "profileEquipTrophy" then
+    equipProfileTrophy(name)
+    return
+  end
   if gameStats.initTimer > 2 and gameStats.canJoin then
     if string.sub(c, 1, 11) == "joinTeamRed" and playerInGame[name] == false and playersRed[tonumber(string.sub(c, 12))].name == '' then
       local isPlayerBanned = messagePlayerIsBanned(name)
@@ -188,6 +198,7 @@ function eventTextAreaCallback(id, name, c)
 
   if c == "menuOpen" then
     if panelOpenCooldown(name, c) then return end
+    if profileState[name] then removeUITrophies(name) end
     ui.addWindow(23,
       "<p align='center'><font size='13px'><a href='event:menuClose'>Menu</a>" .. playerLanguage[name].tr.menuOpenText,
       name, 5, 15, 200, 120, 0.2, false, false, _)
@@ -388,17 +399,7 @@ function eventTextAreaCallback(id, name, c)
     end
   elseif string.sub(c, 1, 7) == "trophie" then
     local index = tonumber(string.sub(c, 8))
-
-    tfm.exec.chatMessage("<ce>" .. playerLanguage[name].tr.msgsTrophies[index] .. "<n>", name)
-    print("<ce>" .. playerLanguage[name].tr.msgsTrophies[index] .. "<n>")
-
-    if playerAchievements[name][index].quantity >= 1 then
-      removePlayerTrophy(name)
-      closeAllWindows(name)
-      playerTrophyImage[name] = tfm.exec.addImage(playerAchievements[name][index].image, "$" .. name, -20, -105, nil)
-      tfm.exec.playEmote(name, 0)
-      removePlayerTrophyImage(name)
-    end
+    showProfileTrophy(name, index)
   elseif c == "selectMap" then
     if panelOpenCooldown(name, c) then return end
     closeAllWindows(name)
