@@ -180,11 +180,11 @@ function clubhouse.creditsDocument(name)
   panel(s.base+40,clubhouse.text(name,"docs.credits.creation"),left,y,77)
   clubhouse.documentText(name,key,s.base+42,"Refletz#6472",left+10,y+31,174,23,15,"#F2E5CD")
   clubhouse.documentText(name,key,s.base+43,"Soristl",left+10,y+55,174,20,10,"#9CAEAA")
-  panel(s.base+50,clubhouse.text(name,"docs.credits.development"),left,y+87,115)
-  for i,entry in ipairs({{"Refletz#6472","main"},{"Myzk#5789","second"}}) do
-    local top=y+116+(i-1)*37
+  panel(s.base+50,clubhouse.text(name,"docs.credits.development"),left,y+72,130)
+  for i,entry in ipairs({{"Refletz#6472","main"},{"Myzk#5789","second"},{"Tanarchosl#4785","second"}}) do
+    local top=y+101+(i-1)*32
     clubhouse.documentText(name,key,s.base+52+(i-1)*2,entry[1],left+10,top,174,19,12,"#F2E5CD")
-    clubhouse.documentText(name,key,s.base+53+(i-1)*2,clubhouse.text(name,"docs.credits."..entry[2]),left+10,top+18,174,20,10,"#9CAEAA")
+    clubhouse.documentText(name,key,s.base+53+(i-1)*2,clubhouse.text(name,"docs.credits."..entry[2]),left+10,top+16,174,18,10,"#9CAEAA")
   end
   panel(s.base+60,clubhouse.text(name,"credits.original_translation"),right,y,202)
   for i,entry in ipairs({{"BR / EN","Refletz#6472 (Soristl)"},{"AR","Ionut_eric_pro#1679"},{"FR","Rowed#4415"},{"PL","Prestige#5656"}}) do

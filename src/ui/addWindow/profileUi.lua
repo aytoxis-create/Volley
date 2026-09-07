@@ -114,7 +114,7 @@ function profileUI(name, playerTarget)
   if roomCreator.name == playerTarget then
     roleLabel = "<font size='10' color='" .. roleColors.vp .. "'>Room Creator · </font>" .. roleLabel
   end
-  if playerTarget == "Myzk#5789" or playerTarget == "Refletz#6472" then
+  if playerTarget == "Myzk#5789" or playerTarget == "Tanarchosl#4785" or playerTarget == "Refletz#6472" then
     local developerKey = playerTarget == "Refletz#6472" and "profile.developer_main" or "profile.developer_second"
     roleLabel = "<font size='10' color='#000000'>" .. clubhouse.escape(clubhouse.text(name, developerKey)) .. "</font>"
   end
