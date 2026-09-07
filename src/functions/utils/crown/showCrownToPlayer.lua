@@ -12,7 +12,8 @@ function setCrownToPlayer(playerName)
             if rankCrown[i].name == player then
               for name1, data in pairs(tfm.get.room.playerList) do
                 if showCrownImages[name1] then
-                  tfm.exec.addImage(crowns[j][i], "$" .. player, -20, -135, name1)
+                  -- Keep the lower edge at y=-65 with the 40x28 crown artwork.
+                  tfm.exec.addImage(crowns[j][i], "$" .. player, -20, -93, name1)
                 end
               end
               break

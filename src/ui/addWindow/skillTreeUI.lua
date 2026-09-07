@@ -110,7 +110,7 @@ local function buildUI(playerName)
   lines[3] = "<br/><p align='center'><a href='event:refresh'><font color='" ..
       CONFIG.COLORS.accent ..
       "'>[⟳ Refresh]</font></a> | <a href='event:close'><font color='" ..
-      toHex(CONFIG.COLORS.error) .. "'>[✕ Close]</font></a></p>"
+      toHex(CONFIG.COLORS.error) .. "'>[×]</font></a></p>"
 
   ui.addTextArea(CONFIG.TEXT_AREA_ID,
     table.concat(lines),

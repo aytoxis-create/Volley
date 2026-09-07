@@ -1,4 +1,7 @@
 function eventPlayerLeft(name)
+  clubhouse.clearPlayer(name)
+  removeUITrophies(name)
+  closeRankingUI(name)
   playerLeft[name] = true
   playerLastMatchCount[name] = countMatches
   playerCanTransform[name] = true

@@ -5,11 +5,10 @@ function eventLoop(elapsedTime, remainingTime)
 
   if mode == "startGame" then
     local x = math.ceil((initGame - os.time()) / 1000)
-    local c = string.format("%d", x)
 
     if not gameStats.stopTimer then
       gameStats.initTimer = x
-      ui.addTextArea(7, "<p align='center'>" .. c .. "", nil, 375, 50, 30, 20, 0x161616, 0x161616, 1, false)
+      clubhouse.lobbyTimer()
     end
 
     if x == 0 and not gameStats.stopTimer then

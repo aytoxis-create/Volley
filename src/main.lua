@@ -76,14 +76,8 @@ else
   trad = lang.en
 end
 
-local regex = "#volley%d+([%+_]*[%w_#]+)"
-local getRoomAdmin = string.match(tfm.get.room.name, regex)
-
-if getRoomAdmin ~= nil then
-  USER_PERMISSIONS[getRoomAdmin] = 2
-else
-  getRoomAdmin = ''
-end
+-- Session ownership is separate from the existing permission levels.
+local roomCreator = { name = nil, adminRevoked = false, selectionClosed = false }
 
 tfm.exec.disableAutoShaman(true)
 tfm.exec.disableAutoNewGame(true)
@@ -148,30 +142,37 @@ local rankThreeTeamsMode = {}
 local playersThreeTeamsMode = {}
 local pageThreeTeamsMode = {}
 local openRank = {}
+local rankingState = {}
 local countMatches = 0
 local playerLastMatchCount = {}
 local playerLeft = {}
 
 local showCrownImages = {}
-local redCrown = { '15296835cdd.png', '1529683757b.png', '15296838f74.png', '1529683a830.png', '1529683c1e0.png',
-  '1529655c3e4.png', '1529655df16.png', '1529655fb1b.png', '152965616ff.png', '15296563a9e.png' }
-local blueCrown = { '1529682cc1e.png', '1529682e815.png', '15296830d1a.png', '1529683291f.png', '15296834389.png',
-  '1529653b65f.png', '1529653d855.png', '1529653fa44.png', '15296541aed.png', '15296543994.png' }
-local yellowCrown = { '192e02e0140.png', '192e02e18b0.png', '192e02e3022.png', '192e02e4795.png', '192e02e5f06.png',
-  '192e02e767b.png', '192e02e8deb.png', '192e02ea7b1.png', '192e02ebf90.png', '192e02ed701.png' }
-local greenCrown = { '192e02d16d0.png', '192e02d2e3f.png', '192e02d45b2.png', '192e02d5d22.png', '192e02d7494.png',
-  '192e02d8c06.png', '192e02da37a.png', '192e02dbaea.png', '192e02dd25c.png', '192e02de9ce.png' }
+local redCrown = { '1a078540734.png', '1a078542676.png', '1a078545557.png', '1a078547498.png', '1a0785493dc.png',
+  '1a07854baed.png', '1a07854da2f.png', '1a07854f19f.png', '1a078550912.png', '1a078552083.png' }
+local blueCrown = { '1a078523255.png', '1a0785249c6.png', '1a078526139.png', '1a0785278ab.png', '1a07852901b.png',
+  '1a07852a78c.png', '1a07852befe.png', '1a07852d670.png', '1a07852ede3.png', '1a078530553.png' }
+local yellowCrown = { '1a0785537f5.png', '1a078554f67.png', '1a0785566d6.png', '1a078557e46.png', '1a0785595b7.png',
+  '1a07855ad29.png', '1a07855c49a.png', '1a07855dc0b.png', '1a07855f37c.png', '1a078560aeb.png' }
+local greenCrown = { '1a078531cc4.png', '1a078533435.png', '1a078534ba9.png', '1a07853631b.png', '1a078537a8c.png',
+  '1a0785391fd.png', '1a07853a96e.png', '1a07853c0e1.png', '1a07853d852.png', '1a07853efc2.png' }
 local rankCrown = {}
 
 local playerAchievements = {}
 local playerAchievementsImages = {}
 local playerTrophyImage = {}
 local isOpenProfile = {}
+local profileState = {}
+local profileKeyTime = {}
+local rankKeyTime = {}
+local panelOpenTime = {}
 local timestamp = 0
 
 local selectMapOpen = {}
 local selectMapPage = {}
 local selectMapImages = {}
+local selectBallOpen = {}
+local selectBallPage = {}
 local customMapCommand = {}
 
 local lobbySpawn = {}
@@ -255,6 +256,8 @@ for name, data in pairs(tfm.get.room.playerList) do
   selectMapOpen[name] = false
   selectMapPage[name] = 1
   selectMapImages[name] = {}
+  selectBallOpen[name] = false
+  selectBallPage[name] = 1
 
   isOpenProfile[name] = false
   playerTrophyImage[name] = 0
