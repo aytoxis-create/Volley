@@ -1,6 +1,5 @@
 function showTheScore()
-  clubhouse.clear(nil,"score")
-  if mode ~= "gameStart" then return end
+  if mode ~= "gameStart" then clubhouse.clear(nil,"score");return end
   -- Retire the old map-relative score textareas, including Real Mode counters.
   for _,id in ipairs({0,1,899899,8998991}) do ui.removeTextArea(id) end
   local colors = {red="#E85A71",blue="#4BA9EF",yellow="#E5CC4B",green="#49CF82"}
@@ -28,7 +27,7 @@ function showTheScore()
       local count = gameStats.teamsMode and gameStats.typeMap == "large3v3" and 3 or 2
       local positions = gameStats.typeMap == "small" and {0,700} or count == 3 and {200,550,900} or {200,900}
       for i=1,count do
-        if getTeamsLifes[i] == nil or getTeamsColors[i] == nil then return end
+        if getTeamsLifes[i] == nil or getTeamsColors[i] == nil then clubhouse.clear(nil,"score");return end
         add(getTeamsLifes[i],tagColors[getTeamsColors[i]] or "#E3ECE7",positions[i])
       end
     end

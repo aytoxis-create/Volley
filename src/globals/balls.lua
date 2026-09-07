@@ -9,11 +9,14 @@ local balls = {
   [8] = { id = 626, isImage = false, image = '1a063030932.png', name = 'Bubble ball' },
   [9] = { id = 630, isImage = false, image = '1a0630395db.png', name = 'Moon ball' },
   [10] = { id = 635, isImage = false, image = '1a0630320a2.png', name = 'Crystal ball' },
-  [11] = { id = 6, isImage = true, image = '18fd18e2334.png', name = 'White Volley ball', size = 30 },
-  [12] = { id = 6, isImage = true, image = '18fd18e5dc6.png', name = 'Original Volley ball', size = 30 },
-  [13] = { id = 604, isImage = true, image = '197d9275c53.png', name = 'Morocco ball', size = 30 },
+  [11] = { id = 6, isImage = true, image = '18fd18e2334.png', name = 'White Volley ball', size = 30, category = 'collection' },
+  [12] = { id = 6, isImage = true, image = '18fd18e5dc6.png', name = 'Original Volley ball', size = 30, category = 'collection', categoryOrder = 0 },
+  [13] = { id = 604, isImage = true, image = 'img@1a080202d73', name = 'Morocco ball', size = 30, category = 'worldcup' },
   [14] = { id = 604, isImage = false, image = '1a06303dc32.png', name = 'Soccer ball' },
-  [15] = { id = 6, isImage = true, image = '19a63e144c6.png', name = 'Uruguay ball', size = 30 }
+  [15] = { id = 6, isImage = true, image = 'img@1a08020e8dd', name = 'Uruguay ball', size = 30, category = 'worldcup' },
+  [16] = { id = 6, isImage = true, image = 'img@1a0802163d6', name = 'Lagon Volley ball', size = 30, category = 'collection' },
+  [17] = { id = 6, isImage = true, image = 'img@1a080213157', name = 'Corail Volley ball', size = 30, category = 'collection' },
+  [18] = { id = 6, isImage = true, image = 'img@1a08021a21f', name = 'Royal Volley ball', size = 30, category = 'collection' }
   -- [99] = {
   --   id = 6,
   --   isImage = no,

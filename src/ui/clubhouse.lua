@@ -1,13 +1,33 @@
 -- Presentation state is owned per player and panel; gameplay callbacks remain in their original handlers.
 clubhouse.interiors = {
-  profile = "01-profile-interieur-660x330.png",
+  profile = "06-profile-interieur-v3-660x330.png",
   ranking = "02-leaderboard-interieur-740x350.png"
 }
-clubhouse.images[clubhouse.interiors.profile] = "1a077f14040.png"
+clubhouse.images[clubhouse.interiors.profile] = "img@1a0802469b1"
 clubhouse.images[clubhouse.interiors.ranking] = "1a077f1595d.png"
 clubhouse.images["01-changement-page-compact-267x87.png"] = "1a077f12583.png"
+-- Module Team image references are passed verbatim, including their img@ prefix.
+clubhouse.images["01-help-v3-650x300.png"] = "img@1a08021daa1"
+clubhouse.screens.help.file = "01-help-v3-650x300.png"
+clubhouse.images["02-credits-real-mode-v3-650x300.png"] = "img@1a08022017f"
+clubhouse.screens.credits.file = "02-credits-real-mode-v3-650x300.png"
+clubhouse.screens.real_rules.file = "02-credits-real-mode-v3-650x300.png"
+clubhouse.images["03-profile-v3-660x330.png"] = "img@1a080223096"
+clubhouse.screens.profile.file = "03-profile-v3-660x330.png"
+clubhouse.images["04-ranking-v3-740x350.png"] = "img@1a08023b49f"
+clubhouse.screens.ranking.file = "04-ranking-v3-740x350.png"
+clubhouse.images["05-sync-v3-400x250.png"] = "img@1a08023e460"
+clubhouse.screens.sync.file = "05-sync-v3-400x250.png"
 clubhouse.inputAt = {}
 clubhouse.selectionTimers = {}
+clubhouse.strings["lobby.selector"]={en="Maps / Balls",fr="Cartes / Ballons",br="Mapas / Bolas",pl="Mapy / Piłki",ar="الخرائط / الكرات"}
+clubhouse.ballCategoryState = {}
+clubhouse.ballCategoryKeys = {"collection", "classic", "worldcup"}
+clubhouse.strings["ball.category.label"]={en="Category",fr="Catégorie",br="Categoria",pl="Kategoria",ar="الفئة"}
+clubhouse.strings["ball.category.classic"]={en="Classics",fr="Classiques",br="Clássicos",pl="Klasyczne",ar="كلاسيكية"}
+clubhouse.strings["ball.category.collection"]={en="Collection",fr="Collection",br="Coleção",pl="Kolekcja",ar="المجموعة"}
+clubhouse.strings["ball.category.worldcup"]={en="World Cup",fr="Coupe du monde",br="Copa do Mundo",pl="Puchar Świata",ar="كأس العالم"}
+clubhouse.strings["ball.category.empty"]={en="No balls yet",fr="Aucun ballon",br="Nenhuma bola",pl="Brak piłek",ar="لا توجد كرات"}
 clubhouse.pageRequests = {}
 clubhouse.nextPageRequest = 1000000
 clubhouse.strings["navigation.prompt"]={en="Enter a page number (1–{pages}).",fr="Saisis un numéro de page (1–{pages}).",br="Digite o número da página (1–{pages}).",pl="Wpisz numer strony (1–{pages}).",ar="أدخل رقم الصفحة (1–{pages})."}
@@ -91,26 +111,102 @@ function clubhouse.clear(name, key)
   end)
 end
 
-function clubhouse.image(name, key, file, x, y, slot, target, scaleX, scaleY)
-  local image = clubhouse.images[file]
-  if not image then return nil end
+function clubhouse.beginUpdate(name, key)
   local state = clubhouse.state(name, key)
-  slot = slot or file
-  if state.images[slot] then tfm.exec.removeImage(state.images[slot]) end
-  local id = tfm.exec.addImage(image, target or "&1", x, y, name, scaleX or 1, scaleY or 1)
+  state.drawnAreas, state.drawnImages = {}, {}
+  return state
+end
+
+function clubhouse.hideArea(name, key, id)
+  local state = clubhouse.views[name] and clubhouse.views[name][key]
+  local area = state and state.areaSpecs and state.areaSpecs[id]
+  if area and area.alpha>0 then clubhouse.removeArea(name,key,id);return end
+  if area and area.text ~= "" then
+    ui.updateTextArea(id, "", name)
+    area.text = ""
+  end
+end
+
+function clubhouse.removeArea(name, key, id)
+  local state = clubhouse.views[name] and clubhouse.views[name][key]
+  ui.removeTextArea(id, name)
+  if state then
+    state.areas[id] = nil
+    if state.areaSpecs then state.areaSpecs[id] = nil end
+  end
+end
+
+function clubhouse.endUpdate(name, key)
+  local state = clubhouse.views[name] and clubhouse.views[name][key]
+  if not state or not state.drawnAreas then return end
+  -- LuaJ cannot continue next() after its current key is deleted.
+  -- Collect obsolete slots first, then mutate the ownership tables.
+  local areas, images = {}, {}
+  for id in pairs(state.areas) do
+    if not state.drawnAreas[id] then areas[#areas+1] = id end
+  end
+  for slot in pairs(state.images) do
+    if not state.drawnImages[slot] then images[#images+1] = slot end
+  end
+  for _,id in ipairs(areas) do clubhouse.hideArea(name, key, id) end
+  for _,slot in ipairs(images) do
+    tfm.exec.removeImage(state.images[slot])
+    state.images[slot] = nil
+    if state.imageSpecs then state.imageSpecs[slot] = nil end
+  end
+  state.drawnAreas, state.drawnImages = nil, nil
+end
+
+function clubhouse.imageId(name, key, image, x, y, slot, target, scaleX, scaleY)
+  local state = clubhouse.state(name, key)
+  if state.drawnImages then state.drawnImages[slot] = true end
+  if not image or image == "" then
+    if state.images[slot] then tfm.exec.removeImage(state.images[slot]) end
+    state.images[slot] = nil
+    if state.imageSpecs then state.imageSpecs[slot] = nil end
+    return nil
+  end
+  target, scaleX, scaleY = target or "&1", scaleX or 1, scaleY or 1
+  local signature = table.concat({image, target, x, y, scaleX, scaleY}, "|")
+  state.imageSpecs = state.imageSpecs or {}
+  if state.images[slot] and state.imageSpecs[slot] == signature then return state.images[slot] end
+  local previous = state.images[slot]
+  local id = tfm.exec.addImage(image, target, x, y, name, scaleX, scaleY)
+  if previous then tfm.exec.removeImage(previous) end
   state.images[slot] = id
+  state.imageSpecs[slot] = id and signature or nil
   return id
 end
 
-function clubhouse.area(name, key, id, text, x, y, width, height, background, fixed)
-  clubhouse.state(name, key).areas[id] = true
-  ui.addTextArea(id, text, name, x, y, width, height, background or 0x142B2E,
-    background or 0x142B2E, background and 1 or 0, fixed ~= false)
+function clubhouse.image(name, key, file, x, y, slot, target, scaleX, scaleY)
+  return clubhouse.imageId(name, key, clubhouse.images[file], x, y, slot or file, target, scaleX, scaleY)
+end
+
+function clubhouse.area(name, key, id, text, x, y, width, height, background, fixed, border, alpha)
+  local state = clubhouse.state(name, key)
+  if state.drawnAreas then state.drawnAreas[id] = true end
+  if alpha == nil then alpha = background and 1 or 0 end
+  background = background or 0x142B2E
+  border = border or background
+  fixed = fixed ~= false
+  -- Transparent backing colors do not affect the rendered area.
+  local signature = table.concat({x,y,width,height,alpha==0 and 0 or background,alpha==0 and 0 or border,alpha,tostring(fixed)}, "|")
+  state.areaSpecs = state.areaSpecs or {}
+  local previous = state.areaSpecs[id]
+  if state.areas[id] and previous and previous.signature == signature then
+    if previous.text ~= text then ui.updateTextArea(id, text, name);previous.text = text end
+    return
+  end
+  state.areas[id] = true
+  state.areaSpecs[id] = {signature=signature, text=text, alpha=alpha}
+  ui.addTextArea(id, text, name, x, y, width, height, background, border, alpha, fixed)
 end
 
 function clubhouse.panel(name, key)
   if key ~= "score" and key ~= "lobby" then clubhouse.hideLobbyControls(name) end
-  clubhouse.clear(name, key)
+  local request=clubhouse.pageRequests[name]
+  if request and clubhouse.views[name] and request.view==clubhouse.views[name][key] then clubhouse.closePageInput(name) end
+  clubhouse.beginUpdate(name, key)
   local screen = clubhouse.screens[key]
   clubhouse.area(name, key, screen.base, "", screen.x, screen.y, screen.width, screen.height)
   if not clubhouse.image(name, key, screen.file, screen.x, screen.y, "background", "~" .. screen.base) then
@@ -131,8 +227,12 @@ clubhouse.closeIcons = {
   selector = {x=595, y=19, width=32, height=25, font_size=18, align="center"},
   selector_balls = {x=595, y=19, width=32, height=25, font_size=18, align="center"},
   menu = {x=165, y=13, width=20, height=20, font_size=14, align="center"},
-  profile = {x=604, y=11, width=32, height=25, font_size=18, align="center"},
-  ranking = {x=684, y=13, width=32, height=25, font_size=18, align="center"}
+  profile = {x=617, y=15, width=24, height=22, font_size=14, align="center"},
+  ranking = {x=697, y=15, width=24, height=22, font_size=14, align="center"},
+  help = {x=607, y=15, width=24, height=22, font_size=14, align="center"},
+  credits = {x=607, y=16, width=24, height=22, font_size=14, align="center"},
+  real_rules = {x=607, y=16, width=24, height=22, font_size=14, align="center"},
+  sync = {x=357, y=16, width=24, height=22, font_size=14, align="center"}
 }
 
 function clubhouse.label(name, key, region, text, event, color)
@@ -148,7 +248,18 @@ function clubhouse.label(name, key, region, text, event, color)
       r.y=r.y-4;r.height=20
     end
     if region == "page" then r.x=r.x+(r.width-80)/2;r.width=80 end
+    if region == "tab_left" or region == "tab_right" then r.y=r.y+2 end
+    if key == "selector_balls" and region == "tab_right" then
+      r.x=r.x+24;r.width=r.width-48;r.font_size=11
+    end
     if key == "selector" and region:match("^name_") then r.font_size=10 end
+    if region == "previous" or region == "next" then r.y=r.y+2 end
+  elseif (key == "help" or key == "settings") and (region == "previous" or region == "next") then
+    local layout={};for field,value in pairs(r) do layout[field]=value end;r=layout
+    if key == "help" then
+      r.x=region=="previous" and 33 or 483;r.width=136;r.align="center";r.font_size=10
+      r.y=r.y+3;r.height=20
+    else r.y=r.y-3;r.height=20 end
   end
   local state = clubhouse.state(name, key)
   state.ids = state.ids or {}
@@ -163,7 +274,7 @@ end
 
 function clubhouse.closeLabel(name, key, event)
   local r = clubhouse.screens[key].regions.close
-  if r then clubhouse.label(name, key, "close", (clubhouse.closeIcons[key] or r.display == "close_icon") and "×" or clubhouse.text(name, "action.close"), event or "closeWindow") end
+  if r then clubhouse.label(name, key, "close", "×", event or "closeWindow") end
 end
 
 function clubhouse.navigation(name, key, page, pages, previous, following)
@@ -190,6 +301,7 @@ function clubhouse.choosePage(name,key)
   local view=clubhouse.views[name] and clubhouse.views[name][key]
   local navigation=view and view.navigation
   if not navigation or navigation.pages<=2 then return end
+  if key=="selector_balls" then clubhouse.closeBallCategories(name) end
   clubhouse.closePageInput(name)
   clubhouse.nextPageRequest=clubhouse.nextPageRequest+1
   local id=clubhouse.nextPageRequest
@@ -259,7 +371,8 @@ function clubhouse.pageInputKey(name,key,down)
 end
 
 function clubhouse.document(name, key, page)
-  closeAllWindows(name)
+  if not (clubhouse.views[name] and clubhouse.views[name][key]) then closeAllWindows(name)
+  else clubhouse.closePageInput(name) end
   clubhouse.panel(name, key)
   clubhouse.closeLabel(name, key)
   if key == "help" then
@@ -273,6 +386,7 @@ function clubhouse.document(name, key, page)
   elseif key == "real_rules" then
     clubhouse.realDocument(name)
   end
+  clubhouse.endUpdate(name, key)
 end
 
 function clubhouse.launcher(name, id)
@@ -280,14 +394,13 @@ function clubhouse.launcher(name, id)
     local index = id == 23 and 1 or id == 30 and 2 or 3
     local b = clubhouse.launchers[index]
     local key = "launcher" .. id
-    clubhouse.clear(player, key)
-    if id ~= 23 and clubhouse.hasPanel(player) then return end
-    if id == 31 and (USER_PERMISSIONS[player] or 1) < 2 then return end
-    if mode ~= "startGame" then return end
+    if (id ~= 23 and clubhouse.hasPanel(player)) or (id == 31 and (USER_PERMISSIONS[player] or 1) < 2) or mode ~= "startGame" then
+      clubhouse.clear(player, key);return
+    end
     -- Center the label across the complete frame, independently of its icon.
     local buttonY = id == 23 and 22 or b.y
     local area = 95500 + id
-    clubhouse.area(player, key, area, "", b.x,buttonY,b.width,b.height)
+    if not clubhouse.state(player,key).areas[area] then clubhouse.area(player,key,area,"",b.x,buttonY,b.width,b.height) end
     clubhouse.image(player, key, b.file,b.x,buttonY,"background","~" .. area)
     clubhouse.area(player, key, area, "<p align='center'><font face='Verdana' size='11' color='#E3ECE7'><a href='event:" ..
       b.event .. "'>" .. clubhouse.escape(clubhouse.text(player,b.text_key)) .. "</a></font></p>",
@@ -297,11 +410,12 @@ end
 
 function clubhouse.menu(name)
   if mode ~= "startGame" then return end
-  closeAllWindows(name)
+  if not (clubhouse.views[name] and clubhouse.views[name].menu) then closeAllWindows(name) end
   clubhouse.clear(name, "launcher23")
   clubhouse.panel(name, "menu")
   clubhouse.closeLabel(name, "menu", "menuClose")
   for i,event in ipairs({"howToPlay","realmode","ranking","credits"}) do clubhouse.label(name,"menu","item_" .. i,nil,event) end
+  clubhouse.endUpdate(name, "menu")
 end
 
 function clubhouse.clearPanels(name)
@@ -351,7 +465,6 @@ function clubhouse.joinArea(id, text, name, x, y, width, height, background, bor
     local signature=text..clubhouse.language(player)..x..":"..y
     local existing=clubhouse.views[player] and clubhouse.views[player][key]
     if existing and existing.signature==signature then return end
-    clubhouse.clear(player,key)
     local label = occupied and (text:match("'>[^<]*$") or ""):sub(3) or clubhouse.text(player,"action.join")
     if occupied and label == "" then label = text:gsub("<[^>]*>","") end
     label = clubhouse.shorten(label,18)
@@ -408,9 +521,10 @@ end
 function clubhouse.settings(name)
   if not settings[name] or (USER_PERMISSIONS[name] or 1) < 2 then return end
   clubhouse.panel(name,"settings")
-  clubhouse.clear(name,"dropdown_modes");clubhouse.clear(name,"dropdown_map_sizes")
   clubhouse.closeLabel(name,"settings")
   local page=pagePlayerSettings[name] == 2 and 2 or 1
+  if not settingsMode[name] or page~=1 then clubhouse.clear(name,"dropdown_modes") end
+  if not settingsMode[name] or page~=2 then clubhouse.clear(name,"dropdown_map_sizes") end
   clubhouse.label(name,"settings","tab_left",nil,"prevSettings1",page==1 and "#DEC18A" or "#A9BCB4")
   clubhouse.label(name,"settings","tab_right",nil,"nextSettings2",page==2 and "#DEC18A" or "#A9BCB4")
   local labels=page==1 and {"mode","randomball","randommap","two_balls"} or {"map_size","consumables","three_balls","minimalist"}
@@ -440,29 +554,137 @@ function clubhouse.settings(name)
     for region,id in pairs(state.ids or {}) do
       local r=screen.regions[region]
       if screen.x+r.x+r.width>popup.x and screen.x+r.x<popup.x+popup.width and screen.y+r.y+r.height>popup.y and screen.y+r.y<popup.y+popup.height then
-        ui.removeTextArea(id,name)
+        clubhouse.removeArea(name,"settings",id)
       end
     end
     clubhouse.panel(name,key)
     for i,k in ipairs(page==1 and modeKeys or sizeKeys) do
       clubhouse.label(name,key,"option_"..i,clubhouse.text(name,k),(page==1 and "setMode" or "setMapType")..i)
     end
+    clubhouse.endUpdate(name,key)
   end
+  clubhouse.endUpdate(name,"settings")
+end
+
+function clubhouse.ballCategory(name)
+  local state=clubhouse.ballCategoryState[name]
+  if not state then
+    state={selected="collection",pages={classic=1,collection=1,worldcup=1}}
+    clubhouse.ballCategoryState[name]=state
+  end
+  return state
+end
+
+function clubhouse.ballItems(name,category)
+  category=category or clubhouse.ballCategory(name).selected
+  local items,indices={},{}
+  for index,ball in ipairs(balls) do
+    if (ball.category or "classic")==category then
+      indices[#indices+1]=index
+    end
+  end
+  table.sort(indices,function(a,b)
+    local first,second=balls[a].categoryOrder or a,balls[b].categoryOrder or b
+    return first==second and a<b or first<second
+  end)
+  for _,index in ipairs(indices) do items[#items+1]=balls[index] end
+  return items,indices
+end
+
+function clubhouse.ballCategoryLabel(name)
+  local view=clubhouse.views[name] and clubhouse.views[name].selector_balls
+  if not view then return end
+  local text=clubhouse.text(name,"tab.balls").." · "..clubhouse.text(name,"ball.category.label").." / "..clubhouse.text(name,"ball.category."..clubhouse.ballCategory(name).selected)
+  clubhouse.label(name,"selector_balls","tab_right",text,
+    view.categoryMenu and "ballCategoriesClose" or "ballCategoriesOpen","#DEC18A")
+  local screen=clubhouse.screens.selector_balls
+  local r=screen.regions.tab_right
+  local available=0
+  for _,key in ipairs(clubhouse.ballCategoryKeys) do
+    if #clubhouse.ballItems(name,key)>0 then available=available+1 end
+  end
+  for i,direction in ipairs({"previous","next"}) do
+    local arrow=i==1 and "←" or "→"
+    if available>1 then arrow="<a href='event:ballCategory:"..direction.."'>"..arrow.."</a>" end
+    clubhouse.area(name,"selector_balls",97610+i,
+      "<p align='center'><font face='Verdana' size='15' color='"..(available>1 and "#DEC18A" or "#718B83").."'>"..arrow.."</font></p>",
+      screen.x+r.x+(i==1 and -2 or r.width-24),screen.y+r.y-1,26,25)
+  end
+end
+
+function clubhouse.closeBallCategories(name)
+  local view=clubhouse.views[name] and clubhouse.views[name].selector_balls
+  if not view or not view.categoryMenu then return end
+  view.categoryMenu=nil
+  for id=97600,97603 do clubhouse.removeArea(name,"selector_balls",id) end
+  if view.images.categoryMenu then tfm.exec.removeImage(view.images.categoryMenu);view.images.categoryMenu=nil end
+  clubhouse.ballCategoryLabel(name)
+end
+
+function clubhouse.ballCategoryCallback(name,callback)
+  if not selectBallOpen[name] or not (clubhouse.views[name] and clubhouse.views[name].selector_balls) then return end
+  if callback=="ballCategoriesClose" then clubhouse.closeBallCategories(name);return end
+  if callback=="ballCategoriesOpen" then
+    clubhouse.closePageInput(name)
+    local view=clubhouse.views[name].selector_balls
+    if view.categoryMenu then return end
+    view.categoryMenu=true
+    local screen=clubhouse.screens.selector_balls
+    local x,y=screen.x+435,screen.y+89
+    clubhouse.area(name,"selector_balls",97600,"",x,y,190,98)
+    clubhouse.image(name,"selector_balls","30-dropdown-map-sizes-190x98.png",x,y,"categoryMenu","~97600")
+    for i,key in ipairs(clubhouse.ballCategoryKeys) do
+      local items=clubhouse.ballItems(name,key)
+      local selected=clubhouse.ballCategory(name).selected==key
+      local text=clubhouse.escape(clubhouse.text(name,"ball.category."..key)).." ("..#items..")"
+      local color=#items==0 and "#718B83" or selected and "#DEC18A" or "#E3ECE7"
+      text="<font color='"..color.."'>"..text.."</font>"
+      if #items>0 then text="<a href='event:ballCategory:"..key.."'>"..text.."</a>" end
+      if selected then text="<b>"..text.."</b>" end
+      clubhouse.area(name,"selector_balls",97600+i,
+        "<p align='center'><font face='"..(clubhouse.language(name)=="ar" and "Arial" or "Verdana").."' size='11' color='"..
+        color.."'>"..text.."</font></p>",x+10,y+9+(i-1)*26,170,23)
+    end
+    clubhouse.ballCategoryLabel(name)
+    return
+  end
+  local category=callback:match("^ballCategory:(%a+)$")
+  local state=clubhouse.ballCategory(name)
+  if category=="previous" or category=="next" then
+    local step=category=="previous" and -1 or 1
+    local keys=clubhouse.ballCategoryKeys
+    local current=1
+    for i,key in ipairs(keys) do if key==state.selected then current=i;break end end
+    category=state.selected
+    for offset=1,#keys do
+      local candidate=keys[(current-1+step*offset)%#keys+1]
+      if #clubhouse.ballItems(name,candidate)>0 then category=candidate;break end
+    end
+  end
+  if category~="classic" and category~="collection" and category~="worldcup" then return end
+  if #clubhouse.ballItems(name,category)==0 then return end
+  if state.selected==category then clubhouse.closeBallCategories(name);return end
+  state.pages[state.selected]=selectBallPage[name] or 1
+  state.selected=category
+  selectBallPage[name]=state.pages[category] or 1
+  selectBallUI(name)
 end
 
 -- Update just the five actions when the shared map/ball cooldown expires.
 function clubhouse.selectorActions(name,isBall)
   local key=isBall and "selector_balls" or "selector"
   if not (clubhouse.views[name] and clubhouse.views[name][key]) then return end
-  local items=isBall and balls or configSelectMap()
+  local items,indices
+  if isBall then items,indices=clubhouse.ballItems(name) else items=configSelectMap() end
   local page=(isBall and selectBallPage or selectMapPage)[name] or 1
   local enabled=(USER_PERMISSIONS[name] or 1)>1 and customMapCommand[name] and mode=="startGame" and not gameStats.realMode
   for i=1,5 do
     local index=(page-1)*5+i
     if items[index] then
-      local selected=isBall and gameStats.customBall and gameStats.customBallId==index or not isBall and gameStats.isCustomMap and gameStats.customMapIndex==index
+      local selectedIndex=isBall and indices[index] or index
+      local selected=isBall and gameStats.customBall and gameStats.customBallId==selectedIndex or not isBall and gameStats.isCustomMap and gameStats.customMapIndex==index
       clubhouse.label(name,key,"select_"..i,clubhouse.text(name,selected and (isBall and "ball.selected" or "map.selected") or "action.select"),
-        not selected and enabled and ((isBall and "setball" or "setmap")..index) or nil,selected and "#DEC18A" or enabled and "#E3ECE7" or "#718B83")
+        not selected and enabled and ((isBall and "setball" or "setmap")..selectedIndex) or nil,selected and "#DEC18A" or enabled and "#E3ECE7" or "#718B83")
     end
   end
 end
@@ -480,17 +702,21 @@ function clubhouse.selectionCooldown(name)
 end
 
 function clubhouse.selector(name, isBall)
-  removeSelectUI(name)
   local key=isBall and "selector_balls" or "selector"
+  if not (clubhouse.views[name] and clubhouse.views[name][key]) then removeSelectUI(name) end
+  clubhouse.closePageInput(name)
+  if isBall then clubhouse.closeBallCategories(name) end
   clubhouse.clear(name,isBall and "selector" or "selector_balls")
   local s=clubhouse.panel(name,key)
   clubhouse.closeLabel(name,key)
-  local items=isBall and balls or configSelectMap()
+  local items=isBall and clubhouse.ballItems(name) or configSelectMap()
   local pages=math.max(1,math.ceil(#items/5))
   local state=isBall and selectBallPage or selectMapPage
   local page=math.max(1,math.min(pages,math.floor(tonumber(state[name]) or 1)));state[name]=page
+  if isBall then local category=clubhouse.ballCategory(name);category.pages[category.selected]=page end
   clubhouse.label(name,key,"tab_left",nil,isBall and "selectMap" or nil,not isBall and "#DEC18A" or "#A9BCB4")
-  clubhouse.label(name,key,"tab_right",nil,not isBall and "selectBall" or nil,isBall and "#DEC18A" or "#A9BCB4")
+  if isBall then clubhouse.ballCategoryLabel(name)
+  else clubhouse.label(name,key,"tab_right",nil,"selectBall","#A9BCB4") end
   for i=1,5 do
     local index=(page-1)*5+i;local item=items[index]
     if item then
@@ -503,17 +729,20 @@ function clubhouse.selector(name, isBall)
       local r=s.regions["preview_"..i];local image=isBall and item.image or item[6]
       if image and image~="" then
         local w=isBall and (item.size or 40) or 100;local h=isBall and w or 43
-        local imageId=tfm.exec.addImage(image,"~"..s.base,s.x+r.x+math.floor((r.width-w)/2),s.y+r.y+math.floor((r.height-h)/2),name)
-        if imageId then table.insert(selectMapImages[name],imageId) end
+        local view=clubhouse.state(name,key)
+        -- Keep previews above the opaque frame and owned by this panel across map changes.
+        clubhouse.imageId(name,key,image,s.x+r.x+math.floor((r.width-w)/2),s.y+r.y+math.floor((r.height-h)/2),"preview_"..i,"~"..view.ids["name_"..i])
       end
     end
   end
+  if isBall and #items==0 then clubhouse.label(name,key,"name_3",clubhouse.text(name,"ball.category.empty")) end
   clubhouse.selectorActions(name,isBall)
   clubhouse.navigation(name,key,page,pages,(isBall and "prevSelectBall" or "prevSelectMap")..(page-1),(isBall and "nextSelectBall" or "nextSelectMap")..(page+1))
+  clubhouse.endUpdate(name,key)
 end
 
 function clubhouse.sync(name)
-  closeAllWindows(name)
+  if not (clubhouse.views[name] and clubhouse.views[name].sync) then closeAllWindows(name) end
   clubhouse.panel(name,"sync");clubhouse.closeLabel(name,"sync")
   clubhouse.label(name,"sync","instruction")
   local candidates={}
@@ -521,11 +750,12 @@ function clubhouse.sync(name)
     if not player:find("*",1,true) then candidates[#candidates+1]={name=player,latency=math.max(0,tonumber(data.averageLatency) or 0)} end
   end
   table.sort(candidates,function(a,b) return a.latency==b.latency and a.name<b.name or a.latency<b.latency end)
-  if #candidates==0 then clubhouse.label(name,"sync","empty");return end
+  if #candidates==0 then clubhouse.label(name,"sync","empty");clubhouse.endUpdate(name,"sync");return end
   for i=1,math.min(5,#candidates) do
     clubhouse.label(name,"sync","name_"..i,clubhouse.shorten(candidates[i].name,30),"sync"..candidates[i].name)
     clubhouse.label(name,"sync","ping_"..i,clubhouse.text(name,"sync.latency",{latency=candidates[i].latency}))
   end
+  clubhouse.endUpdate(name,"sync")
 end
 
 function clubhouse.refresh(name)
@@ -578,6 +808,7 @@ end
 
 function clubhouse.clearPlayer(name)
   clubhouse.pageRequests[name]=nil
+  clubhouse.ballCategoryState[name]=nil
   if clubhouse.selectionTimers[name] then removeTimer(clubhouse.selectionTimers[name]);clubhouse.selectionTimers[name]=nil end
   clubhouse.inputAt[name]=nil
   local views=clubhouse.views[name]
@@ -604,9 +835,9 @@ function clubhouse.newGame()
 end
 
 function clubhouse.drawScores(entries)
-  clubhouse.clear(nil,"score")
   -- Frames and numbers share map coordinates, so neither follows the camera.
   clubhouse.each(nil,function(player)
+    clubhouse.beginUpdate(player,"score")
     for slot,entry in ipairs(entries) do
       local x = entry.x
       -- Cover the legacy grounds within their layer, below mice and shaman objects.
@@ -619,6 +850,7 @@ function clubhouse.drawScores(entries)
           "<p align='center'><font size='20' color='"..entry.color.."'>"..entry.detail.."</font></p>",entry.detailX,20,100,30)
       end
     end
+    clubhouse.endUpdate(player,"score")
   end)
 end
 
@@ -638,5 +870,6 @@ function clubhouse.winner()
     local detail=team and clubhouse.strings["team."..team] and clubhouse.text(name,"victory.winner",{team=clubhouse.text(name,"team."..team)}) or
       tostring(messageWinners[1] or ""):gsub("<[^>]+>","")
     clubhouse.label(name,"victory","detail",detail)
+    clubhouse.endUpdate(name,"victory")
   end)
 end

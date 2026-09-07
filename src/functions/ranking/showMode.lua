@@ -1,8 +1,8 @@
 local rankingModes = { "Normal mode", "2 teams mode", "3 teams mode", "4 teams mode", "Real mode" }
 
 local function rankingArea(id, text, name, x, y, width, height, background, border)
-  ui.addTextArea(id, text, name, x, y, width, height, background or 0x142B2E,
-    border or background or 0x142B2E, background and not clubhouse.images[clubhouse.interiors.ranking] and 1 or 0, true)
+  clubhouse.area(name, "ranking", id, text, x, y, width, height, background, true,
+    border, background and not clubhouse.images[clubhouse.interiors.ranking] and 1 or 0)
 end
 
 local function rankingText(text, color, size)
@@ -35,7 +35,6 @@ function showMode(mode, name)
   for position, player in ipairs(rank) do if player.name == name then ownPosition = position; break end end
   state.ownPosition = ownPosition
 
-  for id = 8800, 8929 do ui.removeTextArea(id, name) end
   clubhouse.panel(name, "ranking")
   clubhouse.closeLabel(name, "ranking", "rankingClose")
   rankingArea(8806, rankingText(profile.session, "#ADAB94", 9), name, 50, 61, 650, 15)
@@ -91,6 +90,7 @@ function showMode(mode, name)
   rankingArea(8831, "<p align='center'>" .. rankingText(pageLabel, pages>2 and "#DEC18A" or "#ADAB94"), name, 190, 342, 75, 19, 0x102323, 0x665135)
   rankingArea(8832, "<p align='center'>" .. rankingText(ownPosition and ("<a href='event:rankingMe'>" .. text.findMe .. "</a>") or profile.unranked, ownPosition and "#DEC18A" or "#777D70"), name, 280, 342, 230, 19, 0x102323, ownPosition and 0xA37A3D or 0x665135)
   rankingArea(8833, "<p align='center'>" .. rankingText(nextPage, page < pages and "#F2E5CD" or "#777D70"), name, 604, 342, 142, 19, 0x102323, 0x665135)
+  clubhouse.endUpdate(name, "ranking")
 end
 
 function openRankingUI(name)

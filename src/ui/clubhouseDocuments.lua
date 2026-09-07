@@ -68,6 +68,18 @@ for page=3,10 do
 end
 
 -- Command syntax is populated below; descriptions retain all five translations.
+documentStrings("docs.alias", "Alias : {aliases}", "Alias: {aliases}", "Atalho: {aliases}", "Skrót: {aliases}", "الاختصار: {aliases}")
+documentStrings("docs.aliases", "Alias : {aliases}", "Aliases: {aliases}", "Atalhos: {aliases}", "Skróty: {aliases}", "الاختصارات: {aliases}")
+clubhouse.documentAliases = {
+  lang={"la"}, join={"j"}, leave={"l"}, profile={"pr"}, maps={"m"}, balls={"b"},
+  votemap={"vm"}, crown={"cr"}, settings={"se"}, password={"pw"}, winscore={"w"}, setmaxplayers={"smp"},
+  resettimer={"re"}, stoptimer={"stop"}, skiptimer={"skip"}, lobby={"lo"},
+  setmap={"sm"}, custommap={"cm"}, customball={"cb"}, setscore={"ssc"},
+  ["2teamsmode"]={"twm","twoteamsmode"}, ["3teamsmode"]={"thm","threeteamsmode"},
+  ["4teamsmode"]={"fom","fourteamsmode"}, realmode={"rm"}, twoballs={"twb"},
+  threeballs={"thb"}, consumables={"co"}, setplayerforce={"spf"}, sync={"sy"},
+  synctfm={"syt"}, setsync={"ssy"}
+}
 clubhouse.documentCommands = {
   ["command.01"] = "!lang AR/BR/EN/FR/PL",
   ["command.02"] = "!join",
@@ -78,7 +90,7 @@ clubhouse.documentCommands = {
   ["command.07"] = "!votemap [index]",
   ["command.08"] = "!crown [true/false]",
   ["command.09"] = "!settings",
-  ["command.10"] = "!pw [password]",
+  ["command.10"] = "!password [password]",
   ["command.11"] = "!winscore [number]",
   ["command.12"] = "!setmaxplayers [6-20]",
   ["command.13"] = "!resettimer",
@@ -117,10 +129,14 @@ function clubhouse.documentRule(name,key,id,x,y,width)
   clubhouse.area(name,key,id,"<p align='center'><font face='Verdana' size='8' color='#82663C'>"..string.rep("─",math.floor(width/8)).."</font></p>",x,y-8,width,20)
 end
 
-function clubhouse.documentCard(name,key,id,title,body,x,y,width,height,command)
+function clubhouse.documentCard(name,key,id,title,body,x,y,width,height,command,aliases)
   clubhouse.documentText(name,key,id+1,title,x+10,y+4,width-20,21,13,"#E5C991",
     command and "Consolas" or (clubhouse.language(name)=="ar" and "Arial" or "Georgia"),command and "left" or nil)
-  clubhouse.documentText(name,key,id+2,body,x+10,y+26,width-20,height-28,11)
+  local bodyY=aliases and 45 or 26
+  if aliases then
+    clubhouse.documentText(name,key,id+3,aliases,x+10,y+25,width-20,20,10,"#9CAEAA")
+  end
+  clubhouse.documentText(name,key,id+2,body,x+10,y+bodyY,width-20,height-bodyY-2,11)
 end
 
 function clubhouse.helpDocument(name,page)
@@ -132,8 +148,12 @@ function clubhouse.helpDocument(name,page)
     local column=(index-1)%2
     if clubhouse.language(name)=="ar" then column=1-column end
     local command=clubhouse.documentCommands[key]
+    local aliases=command and clubhouse.documentAliases[command:match("^!([%w_]+)")]
+    if aliases then
+      aliases=clubhouse.text(name,#aliases==1 and "docs.alias" or "docs.aliases",{aliases="!"..table.concat(aliases," / !")})
+    end
     clubhouse.documentCard(name,"help",s.base+50+(index-1)*3,command or clubhouse.text(name,key..".title"),clubhouse.text(name,key),
-      x+column*307,y+31+math.floor((index-1)/2)*82,295,74,command~=nil)
+      x+column*307,y+31+math.floor((index-1)/2)*82,295,command and 81 or 74,command~=nil,aliases)
   end
 end
 

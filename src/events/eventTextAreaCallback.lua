@@ -13,8 +13,9 @@ function eventTextAreaCallback(id, name, c)
   if playerBan[name] then return end
   if clubhouse.guardCallback(name,c) then return end
   if c:sub(1,10)=="pageInput:" then clubhouse.pageInputCallback(name,c);return end
-  local closing=c=="closeWindow" or c=="menuClose" or c=="profileClose" or c=="rankingClose"
+  local closing=c=="closeWindow" or c=="menuClose" or c=="profileClose" or c=="rankingClose" or c=="ballCategoriesClose"
   if not clubhouse.allowInput(name,closing) then return end
+  if c=="ballCategoriesOpen" or c=="ballCategoriesClose" or c:match("^ballCategory:") then clubhouse.ballCategoryCallback(name,c);return end
   if c:sub(1,11)=="choosePage:" then clubhouse.choosePage(name,c:sub(12));return end
   if c:sub(1, 7) == "ranking" and c ~= "ranking" then
     rankingCallback(name, c)
@@ -354,7 +355,8 @@ function eventTextAreaCallback(id, name, c)
     closeAllWindows(name)
     selectBallOpen[name] = true
     selectMapOpen[name] = false
-    selectBallPage[name] = 1
+    local category=clubhouse.ballCategory(name)
+    selectBallPage[name] = category.pages[category.selected] or 1
     selectBallUI(name)
   elseif string.sub(c, 1, 14) == "nextSelectBall" or string.sub(c, 1, 14) == "prevSelectBall" then
     local index = tonumber(string.sub(c, 15))
