@@ -230,9 +230,9 @@ clubhouse.closeIcons = {
   profile = {x=617, y=15, width=24, height=22, font_size=14, align="center"},
   ranking = {x=697, y=15, width=24, height=22, font_size=14, align="center"},
   help = {x=607, y=15, width=24, height=22, font_size=14, align="center"},
-  credits = {x=607, y=16, width=24, height=22, font_size=14, align="center"},
-  real_rules = {x=607, y=16, width=24, height=22, font_size=14, align="center"},
-  sync = {x=357, y=16, width=24, height=22, font_size=14, align="center"}
+  credits = {x=607, y=15, width=24, height=22, font_size=14, align="center"},
+  real_rules = {x=607, y=15, width=24, height=22, font_size=14, align="center"},
+  sync = {x=357, y=15, width=24, height=22, font_size=14, align="center"}
 }
 
 function clubhouse.label(name, key, region, text, event, color)
