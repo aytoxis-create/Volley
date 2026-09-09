@@ -1,4 +1,12 @@
 function ui.addWindow(id, text, player, x, y, width, height, alpha, corners, closeButton, buttonText, showCornerImage)
+  local numericId = tonumber(id)
+  if numericId == 23 or numericId == 30 or numericId == 31 then
+    clubhouse.launcher(player, numericId)
+    return {}
+  elseif numericId == 266 then
+    clubhouse.each(player, function(name) clubhouse.document(name, "real_rules") end)
+    return {}
+  end
   id = tostring(id)
   ui.addTextArea(id .. "0", "", player, x + 1, y + 1, width - 2, height - 2, 0x8a583c, 0x8a583c, alpha, true)
   ui.addTextArea(id .. "00", "", player, x + 3, y + 3, width - 6, height - 6, 0x2b1f19, 0x2b1f19, alpha, true)

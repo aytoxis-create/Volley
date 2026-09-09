@@ -51,7 +51,7 @@ end
 
 local HELP_TEXTS = {
   { "<bl>commands <n2> = commands",    "<bl>c <n2> = commands",   "<bl>join <n2> = join",              "<bl>j <n2> = join",        "<bl>leave <n2> = leave",        "<bl>l <n2> = leave",       "<bl>lang <n2> = lang",          "<bl>la <n2> = lang",       "<bl>admins <n2> = admins",              "<bl>ads <n2> = admins",       "<bl>balls <n2> = balls",  "<bl>ba <n2> = balls", "<bl>votemap <n2> = votemap",   "<bl>vm <n2> = votemap",  "<bl>crown <n2> = crown",       "<bl>cr <n2> = crown",           "<bl>profile <n2> = profile",   "<bl>pr <n2> = profile",         "<bl>discord <n2> = discord", "<bl>dc <n2> = discord",       "<bl>maps <n2> = maps",   "<bl>m <n2> = maps" },
-  { "<d>resettimer <n2> = resettimer", "<d>re <n2> = resettimer", "<d>setduration <n2> = setduration", "<d>sd <n2> = setduration", "<d>skiptimer <n2> = skiptimer", "<d>skip <n2> = skiptimer", "<d>stoptimer <n2> = stoptimer", "<d>stop <n2> = stoptimer", "<d>setmaxplayers <n2> = setmaxplayers", "<d>smp <n2> = setmaxplayers", "<d>setmap <n2> = setmap", "<d>sm <n2> = setmap", "<d>winscore <n2> = winscore",  "<d>w <n2> = winscore",   "<d>pw <n2> = pw",              "<d>randommap <n2> = randommap", "<d>ra <n2> = randommap",       "<d>custommap <n2> = custommap", "<d>cm <n2> = custommap",     "<d>setscore <n2> = setscore", "<d>ssc <n2> = setscore", "<d>4teamsmode <n2> = 4teamsmode", "<d>fom <n2> = 4teamsmode", "<d>2teamsmode <n2> = 2teamsmode", "<d>twm <n2> = 2teamsmode", "<d>3teamsmode <n2> = 3teamsmode", "<d>thm <n2> = 3teamsmode", "<d>realmode <n2> = realmode", "<d>rm <n2> = realmode", "<d>admin <n2> = admin", "<d>a <n2> = admin", "<d>unadmin <n2> = unadmin", "<d>ua <n2> = unadmin", "<d>randomball <n2> = randomball", "<d>rb <n2> = randomball", "<d>customball <n2> = customball", "<d>cb <n2> = customball", "<d>lobby <n2> = lobby", "<d>lo <n2> = lobby", "<d>autosyncsys <n2> = autosyncsystem", "<d>asy <n2> = autosyncsystem", "<d>sync <n2> = sync", "<d>sy <n2> = sync", "<d>setsync <n2> = setsync", "<d>ssy <n2> = setsync", "<d>synctfm <n2> = synctfm", "<d>syt <n2> = synctfm", "<d>setplayerforce <n2> = setplayerforce", "<d>spf <n2> = setplayerforce", "<d>np <n2> = np", "<d>test <n2> = test", "<d>t <n2> = test", "<d>twoballs <n2> = twoballs", "<d>twb <n2> = twoballs", "<d>threeballs <n2> = threeballs", "<d>thb <n2> = threeballs", "<d>consumables <n2> = consumables", "<d>co <n2> = consumables", "<d>settings <n2> = settings", "<d>se <n2> = settings" },
+  { "<d>resettimer <n2> = resettimer", "<d>re <n2> = resettimer", "<d>setduration <n2> = setduration", "<d>sd <n2> = setduration", "<d>skiptimer <n2> = skiptimer", "<d>skip <n2> = skiptimer", "<d>stoptimer <n2> = stoptimer", "<d>stop <n2> = stoptimer", "<d>setmaxplayers <n2> = setmaxplayers", "<d>smp <n2> = setmaxplayers", "<d>setmap <n2> = setmap", "<d>sm <n2> = setmap", "<d>winscore <n2> = winscore",  "<d>w <n2> = winscore",   "<d>password <n2> = password", "<d>pw <n2> = password",              "<d>randommap <n2> = randommap", "<d>ra <n2> = randommap",       "<d>custommap <n2> = custommap", "<d>cm <n2> = custommap",     "<d>setscore <n2> = setscore", "<d>ssc <n2> = setscore", "<d>4teamsmode <n2> = 4teamsmode", "<d>fom <n2> = 4teamsmode", "<d>2teamsmode <n2> = 2teamsmode", "<d>twm <n2> = 2teamsmode", "<d>3teamsmode <n2> = 3teamsmode", "<d>thm <n2> = 3teamsmode", "<d>realmode <n2> = realmode", "<d>rm <n2> = realmode", "<d>admin <n2> = admin", "<d>a <n2> = admin", "<d>unadmin <n2> = unadmin", "<d>ua <n2> = unadmin", "<d>randomball <n2> = randomball", "<d>rb <n2> = randomball", "<d>customball <n2> = customball", "<d>cb <n2> = customball", "<d>lobby <n2> = lobby", "<d>lo <n2> = lobby", "<d>autosyncsys <n2> = autosyncsystem", "<d>asy <n2> = autosyncsystem", "<d>sync <n2> = sync", "<d>sy <n2> = sync", "<d>setsync <n2> = setsync", "<d>ssy <n2> = setsync", "<d>synctfm <n2> = synctfm", "<d>syt <n2> = synctfm", "<d>setplayerforce <n2> = setplayerforce", "<d>spf <n2> = setplayerforce", "<d>np <n2> = np", "<d>test <n2> = test", "<d>t <n2> = test", "<d>twoballs <n2> = twoballs", "<d>twb <n2> = twoballs", "<d>threeballs <n2> = threeballs", "<d>thb <n2> = threeballs", "<d>consumables <n2> = consumables", "<d>co <n2> = consumables", "<d>settings <n2> = settings", "<d>se <n2> = settings" },
   { "<vi>padmin <n2> = padmin",        "<vi>pa <n2> = padmin",    "<vi>pause <n2> = pause",            "<vi>p <n2> = pause",       "<vi>kick <n2> = kick",          "<vi>ki <n2> = kick",       "<vi>fleave <n2> = fleave",      "<vi>fl <n2> = fleave",     "<vi>ban <n2> = ban",                    "<vi>b <n2> = ban",            "<vi>unban <n2> = unban",  "<vi>ub <n2> = unban", "<vi>killspec <n2> = killspec", "<vi>ks <n2> = killspec", "<vi>teleport <n2> = teleport", "<vi>tp <n2> = teleport",        "<vi>listsync <n2> = listsync", "<vi>lsy <n2> = listsync", "<vi>setlifes <n2> = setlifes", "<vi>sl <n2> = sl" }
 }
 
@@ -193,6 +193,7 @@ local function cmdLang(args)
 
   if translations[langCode] then
     playerLanguage[name].tr = translations[langCode]
+    clubhouse.refresh(name)
   end
 end
 
@@ -203,7 +204,7 @@ local function cmdAdmins(args)
   local buffer_regular = {}
 
   for admin, permission in pairs(USER_PERMISSIONS) do
-    if permission == 2 then
+    if permission == 2 and admin ~= roomCreator.name then
       buffer_regular[#buffer_regular + 1] = admin
     end
     if permission == 3 then
@@ -215,6 +216,11 @@ local function cmdAdmins(args)
   end
 
   local lines = {}
+
+  if roomCreator.name then
+    local status = (USER_PERMISSIONS[roomCreator.name] or 1) < 2 and " (admin removed)" or ""
+    lines[#lines + 1] = " <vp>> Room Creator:\n" .. roomCreator.name .. status
+  end
 
   if #buffer_permas > 0 then
     lines[#lines + 1] = " <vi>> Permanent Admins:\n" ..
@@ -347,26 +353,17 @@ end
 
 local function cmdProfile(args)
   local name = args[1]
-  local target = args[2]
-
-  -- Update the Buttons with the id variable later,
-  -- not a magical number. @Vit0rg
-  closeRankingUI(name)
-  removeButtons(25, name)
-  removeButtons(26, name)
-  removeUITrophies(name)
-
+  -- The dispatcher appends the command/alias as the last argument.
+  local query = #args > 2 and args[2] or name
+  local target, reason = resolveProfileTarget(query)
   if not target then
-    profileUI(name, name)
+    tfm.exec.chatMessage("<rose>" .. getProfileText(name)[reason] .. "<n>", name)
     return
   end
-
-  for n, _ in pairs(playerAchievements) do
-    if string.lower(n) == string.lower(target) then
-      profileUI(name, n)
-      break
-    end
-  end
+  if profileKeyTime[name] and os.time() - profileKeyTime[name] < 2000 then return end
+  profileKeyTime[name] = os.time()
+  closeAllWindows(name)
+  profileUI(name, target)
 end
 
 local function cmdDiscord(args)
@@ -544,10 +541,8 @@ local function cmdSkipTimer(args)
   local name = args[1]
   if mode ~= "startGame" then return end
 
-  initGame = os.time() + 10000
+  initGame = os.time() + 5000
   tfm.exec.chatMessage(" <bv>skiptimer enabled by " .. name .. " <n> ", nil)
-  tfm.exec.chatMessage(
-    "<vi>Yes, now it is 10s, fix your dopamine addiction and let the script load in peace.")
 end
 
 local function cmdSetDuration(args)
@@ -730,70 +725,67 @@ local function cmdPassword(args)
     " by " .. name .. " <n> ", nil)
 end
 
+local function resolveAdminTarget(target)
+  if not target then return end
+  local lowerTarget = string.lower(target)
+  for player in pairs(tfm.get.room.playerList) do
+    if string.lower(player) == lowerTarget then return player end
+  end
+  for player in pairs(USER_PERMISSIONS) do
+    if string.lower(player) == lowerTarget then return player end
+  end
+end
+
 local function cmdAdmin(args)
   local name = args[1]
-  local target = args[2]
+  local target = resolveAdminTarget(args[2])
 
-  local permission = USER_PERMISSIONS[target] or 1
+  if not target or not tfm.get.room.playerList[target] or target:find("*", 1, true)
+    or (USER_PERMISSIONS[target] or 1) > 1 then return end
 
-  if not target or permission > 1 then return end
-
-  if string.match(target, "%*") then
-    return
+  USER_PERMISSIONS[target] = 2
+  if target == roomCreator.name then
+    roomCreator.adminRevoked = false
   end
-
-  -- This loop approach will be outdated when
-  -- we are sure that the playerList is
-  -- always updated on join and leave events.
-  -- @Vit0rg
-  for n, _ in pairs(tfm.get.room.playerList) do
-    if string.lower(n) == string.lower(target) then
-      USER_PERMISSIONS[n] = 2
-      tfm.exec.chatMessage("<bv>" .. n .. " made admin by " .. name ..
-        " <n> ", nil)
-      break
-    end
-  end
+  tfm.exec.chatMessage("<bv>" .. target .. " made admin by " .. name .. " <n> ", nil)
 end
 
 local function cmdUnadmin(args)
   local name = args[1]
   local target = args[2]
+  local userLevel = USER_PERMISSIONS[name] or 1
 
   if not target then return end
-  if USER_PERMISSIONS[target] > 2 then return end
-
-  if string.match(target, "%*") then
+  if string.lower(target) == "all" then
+    if userLevel < 3 then return end
+    for admin, permission in pairs(USER_PERMISSIONS) do
+      if permission == 2 then
+        USER_PERMISSIONS[admin] = 1
+        if admin == roomCreator.name then
+          roomCreator.adminRevoked = true
+        end
+        closeWindow(31, admin)
+      end
+    end
+    tfm.exec.chatMessage("<rose>Admin list reset by " .. name .. " <n> ", nil)
     return
   end
 
-  -- Unadmin All (Perm Admin only)
-  if USER_PERMISSIONS[name] > 2 then
-    if target == "all" then
-      for admin, _ in pairs(USER_PERMISSIONS) do
-        if USER_PERMISSIONS[admin] == 2 then
-          USER_PERMISSIONS[admin] = 1
-        end
-      end
-
-      tfm.exec.chatMessage(
-        "<rose>Admin list reset by " .. name .. " <n> ", nil)
-      return
-    end
-
-    if USER_PERMISSIONS[target] < 4 then
-      USER_PERMISSIONS[target] = 1
-      tfm.exec.chatMessage(
-        "<vi>" .. target .. " removed from admin by " .. name .. " <n> ",
-        nil)
-    end
+  target = resolveAdminTarget(target)
+  if not target or target:find("*", 1, true) or (USER_PERMISSIONS[target] or 1) ~= 2 then
+    return
+  end
+  if target == roomCreator.name and userLevel < 3 then
+    tfm.exec.chatMessage("<rose>Only temporary permanent and permanent admins can remove the Room Creator's admin rights.<n>", name)
+    return
   end
 
-  if USER_PERMISSIONS[target] < 3 then
-    USER_PERMISSIONS[target] = 1
-    tfm.exec.chatMessage("<vi>" .. target .. " removed from admin by " ..
-      name .. " <n> ", nil)
+  USER_PERMISSIONS[target] = 1
+  if target == roomCreator.name then
+    roomCreator.adminRevoked = true
   end
+  closeWindow(31, target)
+  tfm.exec.chatMessage("<vi>" .. target .. " removed from admin by " .. name .. " <n> ", nil)
 end
 
 local function cmdRandomMap(args)
@@ -930,8 +922,8 @@ local function cmdCustomMap(args)
 end
 
 local function cmdCustomBall(args)
-  local name = 1
-  local index = math.abs(math.floor(args[2]))
+  local name = args[1]
+  local index = tonumber(args[2])
 
   if mode ~= "startGame" then return end
 
@@ -940,6 +932,8 @@ local function cmdCustomBall(args)
       name)
     return
   end
+
+  index = math.floor(index)
 
   -- One interesting optimization is to use a
   -- single function to handle custommap and randommap,
@@ -1030,6 +1024,11 @@ end
 local function cmdSetTeamMode(args)
   local name = args[1]
   local toggle = args[2]
+
+  if mode ~= "startGame" then
+    tfm.exec.chatMessage('<bv>You can only change the game mode in the lobby<n>', name)
+    return
+  end
 
   if toggle ~= 'true' and toggle ~= 'false' then
     tfm.exec.chatMessage(
@@ -1126,8 +1125,7 @@ end
 local function cmdSettings(args)
   local name = args[1]
 
-  closeRankingUI(name)
-  removeUITrophies(name)
+  closeAllWindows(name)
   settings[name] = true
   updateSettingsUI(name)
 end
@@ -1135,19 +1133,13 @@ end
 -- PERMANENT ADMIN COMMANDS
 local function cmdBroadcast(args)
   local name = args[1]
-  if #args > 2 then
-    local categories =
-    {
-      ['a'] = '<vi>',
-      ['t'] = '<v>',
-      ['w'] = '<j>'
-    }
 
-    local category = categories[args[2]] or categories['general']
-    local message = "\n" .. category .. args[3]
-  end
+  -- args[1] = player name, args[#args] = command name, message = args[2..#args-1]
+  if #args < 3 then return end
 
-  local message = "<vi>[Announcement]\n" .. args[2]
+  local text = table.concat(args, " ", 2, #args - 1)
+
+  local message = "<vi>[#Volley Announcement]: " .. text
 
   if USER_PERMISSIONS[name] and USER_PERMISSIONS[name] > 2 then
     tfm.exec.chatMessage(message, nil)
@@ -1449,6 +1441,7 @@ COMMANDS = {
     ["sm"] = cmdSetMap,
     ["winscore"] = cmdWinScore,
     ["w"] = cmdWinScore,
+    ["password"] = cmdPassword,
     ["pw"] = cmdPassword,
     ["randommap"] = cmdRandomMap,
     ["ra"] = cmdRandomMap,
@@ -1548,7 +1541,7 @@ function eventChatCommand(name, c)
 
 
   local handler = nil
-  for i = 1, max_depth do
+  for i = max_depth, 1, -1 do
     if COMMANDS[i] and COMMANDS[i][cmdName] then
       handler = COMMANDS[i][cmdName]
       break
@@ -1562,5 +1555,8 @@ function eventChatCommand(name, c)
 
 
   args[#args + 1] = cmdName
+  if handler==cmdProfile or handler==cmdLang or handler==cmdSettings or handler==cmdListSync then
+    if not clubhouse.allowInput(name,false) then return end
+  end
   handler(args)
 end

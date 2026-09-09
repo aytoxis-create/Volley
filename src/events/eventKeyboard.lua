@@ -40,10 +40,6 @@ local FORCE_CONFIG = {
 ]]
 local function cleanUpUI(name)
   closeAllWindows(name)
-  closeRankingUI(name)
-  removeButtons(25, name)
-  removeButtons(26, name)
-  removeUITrophies(name)
 end
 
 local function handleConsumables(name, key, x, y, offsetX)
@@ -126,6 +122,33 @@ local function handleRealMode(name, key, x)
   return true -- Allow execution to continue
 end
 
+local function getPlayerTransformColor(name)
+  -- Remaining teams keep their colors when the court shrinks after elimination.
+  if (gameStats.teamsMode or gameStats.threeTeamsMode)
+    and (gameStats.typeMap == "large3v3" or gameStats.typeMap == "small") then
+    for index, team in ipairs(teamsPlayersOnGame) do
+      for _, player in ipairs(team) do
+        if player.name == name then
+          return getTeamsColorsName[index] or 0x81348A
+        end
+      end
+    end
+  end
+
+  local teams = {
+    { playersRed, 0xEF4444 },
+    { playersBlue, 0x3B82F6 },
+    { playersYellow, 0xF59E0B },
+    { playersGreen, 0x109267 }
+  }
+  for _, team in ipairs(teams) do
+    for _, player in ipairs(team[1]) do
+      if player.name == name then return team[2] end
+    end
+  end
+  return 0x81348A
+end
+
 local function handlePlayerTransform(name, x, y)
   local additionalForce = 0
   playerPressSpace[name] = true
@@ -187,7 +210,7 @@ local function handlePlayerTransform(name, x, y)
     height = height,
     restitution = gameStats.physicObjectForce + additionalForce,
     friction = 0,
-    color = 0x81348A,
+    color = getPlayerTransformColor(name),
     miceCollision = false,
     groundCollision = true
   })
@@ -237,6 +260,12 @@ function eventKeyboard(name, key, down, x, y, xv, yv)
   -- Shouldn't the player data be memoized?
   local player = tfm.get.room.playerList[name]
   if not player then return end
+  if clubhouse.pageInputKey(name,key,down) then return end
+  if key == KEYS.PROFILE or key == KEYS.RANK then
+    if not down then return end
+    local closing=key==KEYS.PROFILE and isOpenProfile[name] or key==KEYS.RANK and openRank[name]
+    if not clubhouse.allowInput(name,closing) then return end
+  end
 
   -- 1. Movement & Offset Calculation
   local _offsets = { x = players[name].offsets.x, y = players[name].offsets.y }
@@ -253,12 +282,18 @@ function eventKeyboard(name, key, down, x, y, xv, yv)
 
   -- 3. Profile Key (P)
   if key == KEYS.PROFILE then
-    cleanUpUI(name)
-    if isOpenProfile[name] then
-      closeWindow(24, name)
-      closeWindow(25, name)
+    -- Capture state BEFORE cleanUpUI (removeUITrophies resets isOpenProfile)
+    local wasOpen = isOpenProfile[name]
+
+    -- Closing is instant; opening has a 2s anti-spam cooldown (spamming crashed the script)
+    if wasOpen then
+      removeUITrophies(name)
       return
     end
+    if profileKeyTime[name] and os.time() - profileKeyTime[name] < 2000 then return end
+    profileKeyTime[name] = os.time()
+
+    cleanUpUI(name)
     profileUI(name, name)
     return
   end
@@ -266,18 +301,9 @@ function eventKeyboard(name, key, down, x, y, xv, yv)
   -- 4. Rank Key (L)
   if key == KEYS.RANK then
     if openRank[name] then
-      openRank[name] = false
-      cleanUpUI(name)
-      ui.removeTextArea(99992, name)
-      closeWindow(266, name)
+      closeRankingUI(name)
     else
-      openRank[name] = true
-      ui.addWindow(24, "<p align='center'><font size='16px'>", name, 125, 60, 650, 300, 1, false, true,
-        playerLanguage[name].tr.closeUIText)
-      ui.addTextArea(9999543, "<p align='center'>Room Ranking", name, 17, 168, 100, 20, 0x142b2e, 0x8a583c, 1, true)
-      ui.addTextArea(9999544, "<p align='center'><n2>Global Ranking<n>", name, 17, 268, 100, 18, 0x142b2e, 0x8a583c, 1,
-        true)
-      showMode(playerRankingMode[name], name)
+      openRankingUI(name)
     end
     return
   end

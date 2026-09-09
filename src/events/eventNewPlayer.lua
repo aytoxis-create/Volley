@@ -24,6 +24,8 @@ function eventNewPlayer(name)
   selectMapOpen[name] = false
   selectMapPage[name] = 1
   selectMapImages[name] = {}
+  selectBallOpen[name] = false
+  selectBallPage[name] = 1
 
   isOpenProfile[name] = false
   playerTrophyImage[name] = 0
@@ -136,6 +138,8 @@ function eventNewPlayer(name)
     tfm.exec.kickPlayer(name)
   end
 
+  assignRoomCreator(name)
+
   if isPlayerDead[name] == nil then
     isPlayerDead[name] = false
   end
@@ -144,9 +148,10 @@ function eventNewPlayer(name)
   tfm.exec.chatMessage(playerLanguage[name].tr.welcomeMessage, name)
 
   if mode == "startGame" then
+    clubhouse.lobby(name)
     eventNewGameShowLobbyTexts()
 
-    ui.addWindow(30, "<p align='center'><font size='13px'><a href='event:selectMap'>Select a map", name, 10, 370, 150, 30,
+    ui.addWindow(30, "<p align='center'><font size='13px'><a href='event:selectMap'>Select a map/ball", name, 10, 370, 150, 30,
       1, false, false, _)
 
     if USER_PERMISSIONS[name] and USER_PERMISSIONS[name] > 1 then
