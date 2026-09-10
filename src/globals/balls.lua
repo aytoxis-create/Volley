@@ -29,11 +29,5 @@ local balls = {
 -- Hosted skins are pre-scaled on 40x40 canvases; render at 1x with centered offsets.
 -- previewImage/previewSize preserve the existing selector artwork.
 function addBallSkin(objId)
-  local ball = balls[gameStats.customBallId]
-
-  if not objId or ball.image == '' then return end
-
-  local scale = ball.skinScale or 1
-  local offset = -(ball.size or 40) * scale / 2
-  tfm.exec.addImage(ball.image, "#" .. objId, offset, offset, nil, scale, scale, _, 10)
+  clubhouse.ballSkins.spawn(objId, balls[gameStats.customBallId])
 end
