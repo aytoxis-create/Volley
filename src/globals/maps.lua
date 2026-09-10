@@ -385,6 +385,13 @@ local customMaps = {
     [3] = 'Squad',
     [4] = 'Refletz#6472',
     [6] = '19fa04a03ee.png'
+  },
+  [55] = {
+    [1] = '@7984265',
+    [2] = '@7984266',
+    [3] = "Lava Bumpers",
+    [4] = 'Ppoppohaejuseyo#2315',
+    [6] = '1a0871585f1.png'
   }
   -- [99] = {
   --   [1] = 'small map',
@@ -808,6 +815,14 @@ local customMapsFourTeamsMode = {
     [4] = 'Playfun24#9322 and Sabiro#0000',
     [5] = '@7983232',
     [6] = '19fa049ec7e.png'
+  },
+  [46] = {
+    [1] = '@7984263',
+    [2] = '@7984264',
+    [3] = "Lava Bumpers",
+    [4] = 'Ppoppohaejuseyo#2315',
+    [5] = '@7984265',
+    [6] = '1a0871585f1.png'
   }
   -- [99] =
   -- {
