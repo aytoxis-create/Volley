@@ -14,7 +14,7 @@ clubhouse.ballSkins = (function()
     images[name] = images[name] or {}
     if images[name][id] then return end
     images[name][id] = tfm.exec.addImage(skin.image, "#" .. id,
-      skin.offset, skin.offset, name, skin.scale, skin.scale, 0, 1)
+      skin.offset, skin.offset, name, skin.scale, skin.scale, 0, 10)
   end
 
   function api.spawn(id, ball)
