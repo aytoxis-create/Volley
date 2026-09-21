@@ -1,5 +1,5 @@
 function disablePlayersCanTransform(time)
-  playersCanTransform = addRoundTimer(function(i)
+  playersCanTransform = addTimer(function(i)
     if i == 1 then
       gameStats.canTransform = true
     end

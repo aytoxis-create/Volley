@@ -33,7 +33,7 @@ function setLostLife()
             toggleMapType()
             updateTeamsColors(1)
             gameStats.canTransform = false
-            delayToToggleMap = addRoundTimer(function(i)
+            delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
               end
@@ -75,7 +75,7 @@ function setLostLife()
             toggleMapType()
             updateTeamsColors(2)
             gameStats.canTransform = false
-            delayToToggleMap = addRoundTimer(function(i)
+            delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
               end
@@ -115,7 +115,7 @@ function setLostLife()
             toggleMapType()
             updateTeamsColors(3)
             gameStats.canTransform = false
-            delayToToggleMap = addRoundTimer(function(i)
+            delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
               end
@@ -155,7 +155,7 @@ function setLostLife()
             toggleMapType()
             updateTeamsColors(4)
             gameStats.canTransform = false
-            delayToToggleMap = addRoundTimer(function(i)
+            delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
               end
@@ -202,7 +202,7 @@ function setLostLife()
               updateTeamsColors(1)
               toggleMapType()
               gameStats.canTransform = false
-              delayToToggleMap = addRoundTimer(function(i)
+              delayToToggleMap = addTimer(function(i)
                 if i == 1 then
                   toggleMap()
                 end
@@ -244,7 +244,7 @@ function setLostLife()
               toggleMapType()
               updateTeamsColors(2)
               gameStats.canTransform = false
-              delayToToggleMap = addRoundTimer(function(i)
+              delayToToggleMap = addTimer(function(i)
                 if i == 1 then
                   toggleMap()
                 end
@@ -286,7 +286,7 @@ function setLostLife()
               toggleMapType()
               updateTeamsColors(3)
               gameStats.canTransform = false
-              delayToToggleMap = addRoundTimer(function(i)
+              delayToToggleMap = addTimer(function(i)
                 if i == 1 then
                   toggleMap()
                 end
@@ -341,7 +341,8 @@ function setLostLife()
               updateTwoBallOnGame()
               
               tfm.exec.removeObject (ballsId[j])
-              beginEndGame()
+              mode = "endGame"
+              gameTimeEnd = os.time() + 5000
               return
             end
             tfm.exec.chatMessage(messageTeamsLostOneLife[1], nil)
@@ -381,7 +382,8 @@ function setLostLife()
               updateRankingFourTeamsMode()
               updateTwoBallOnGame()
               tfm.exec.removeObject (ballsId[j])
-              beginEndGame()
+              mode = "endGame"
+              gameTimeEnd = os.time() + 5000
               return
             end
             tfm.exec.chatMessage(messageTeamsLostOneLife[2], nil)

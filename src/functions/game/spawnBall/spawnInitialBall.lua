@@ -55,7 +55,7 @@ function spawnInitialBall()
     if team == "red" then
       gameStats.aceRed = true
       gameStats.redLimitSpawn = 1
-      local delaySpawnBall = addRoundTimer(function(i)
+      local delaySpawnBall = addTimer(function(i)
         if i == 1 then
           if gameStats.customBall then
             ball_id = tfm.exec.addShamanObject(balls[gameStats.customBallId].id, 700, 50, 0, 0, -5, true)
@@ -68,7 +68,7 @@ function spawnInitialBall()
     elseif team == "blue" then
       gameStats.aceBlue = true
       gameStats.blueLimitSpawn = 1
-      local delaySpawnBall = addRoundTimer(function(i)
+      local delaySpawnBall = addTimer(function(i)
         if i == 1 then
           if gameStats.customBall then
             ball_id = tfm.exec.addShamanObject(balls[gameStats.customBallId].id, 1900, 50, 0, 0, -5, true)
@@ -82,7 +82,7 @@ function spawnInitialBall()
 
     showTheScore()
 
-    delayToVerifyBall = addRoundTimer(function(i)
+    delayToVerifyBall = addTimer(function(i)
       if i == 1 then
         ballOnGame = true
       end

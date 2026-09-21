@@ -1,90 +1,159 @@
--- Timers are iterated through a snapshot: callbacks may cancel or create timers.
--- IDs are never reused, so an old UI/player handle cannot cancel a newer timer.
-local timerState = { active = {}, nextId = 0, round = 0 }
-
-function addTimer(callback, ms, loops, label, ...)
-  timerState.nextId = timerState.nextId + 1
-  local id = timerState.nextId
-  timerState.active[id] = {
-    callback = callback, time = ms, loops = loops or 1, label = label,
-    arguments = { n = select('#', ...), ... }, currentTime = 0,
-    currentLoop = 0, isPaused = false
-  }
-  return id
+local List = {}
+function List.new()
+  return { first = 0, last = -1 }
 end
 
-function addRoundTimer(callback, ms, loops, label, ...)
-  local id = addTimer(callback, ms, loops, label, ...)
-  timerState.active[id].round = timerState.round
+function List.pushleft(list, value)
+  local first = list.first - 1
+  list.first = first
+  list[first] = value
+end
+
+function List.pushright(list, value)
+  local last = list.last + 1
+  list.last = last
+  list[last] = value
+end
+
+function List.popleft(list)
+  local first = list.first
+  if first > list.last then
+    return nil
+  end
+  local value = list[first]
+  list[first] = nil -- to allow garbage collection
+  list.first = first + 1
+  return value
+end
+
+function List.popright(list)
+  local last = list.last
+  if list.first > last then
+    return nil
+  end
+  local value = list[last]
+  list[last] = nil -- to allow garbage collection
+  list.last = last - 1
+  return value
+end
+
+-- the lib
+local timerList = {}
+local timersPool = List.new()
+
+function addTimer(callback, ms, loops, label, ...)
+  local id = List.popleft(timersPool)
+  if id then
+    local timer = timerList[id]
+    timer.callback = callback
+    timer.label = label
+    timer.arguments = { ... }
+    timer.time = ms
+    timer.currentTime = 0
+    timer.currentLoop = 0
+    timer.loops = loops or 1
+    timer.isComplete = false
+    timer.isPaused = false
+    timer.isEnabled = true
+  else
+    id = #timerList + 1
+    timerList[id] = {
+      callback = callback,
+      label = label,
+      arguments = { ... },
+      time = ms,
+      currentTime = 0,
+      currentLoop = 0,
+      loops = loops or 1,
+      isComplete = false,
+      isPaused = false,
+      isEnabled = true,
+    }
+  end
   return id
 end
 
 function getTimerId(label)
-  local first
-  for id, timer in pairs(timerState.active) do
-    if timer.label == label and (not first or id < first) then first = id end
+  local found
+  for id = 1, #timerList do
+    local timer = timerList[id]
+    if timer.label == label then
+      found = id
+      break
+    end
   end
-  return first
+  return found
 end
 
 function pauseTimer(id)
-  if type(id) == 'string' then id = getTimerId(id) end
-  local timer = timerState.active[id]
-  if not timer then return false end
-  timer.isPaused = true
-  return true
+  if type(id) == 'string' then
+    id = getTimerId(id)
+  end
+
+  if timerList[id] and timerList[id].isEnabled then
+    timerList[id].isPaused = true
+    return true
+  end
+  return false
 end
 
 function resumeTimer(id)
-  if type(id) == 'string' then id = getTimerId(id) end
-  local timer = timerState.active[id]
-  if not timer or not timer.isPaused then return false end
-  timer.isPaused = false
-  return true
+  if type(id) == 'string' then
+    id = getTimerId(id)
+  end
+
+  if timerList[id] and timerList[id].isPaused then
+    timerList[id].isPaused = false
+    return true
+  end
+  return false
 end
 
 function removeTimer(id)
   if type(id) == 'string' then
-    local removed = false
-    for key, timer in pairs(timerState.active) do
-      if timer.label == id then timerState.active[key] = nil; removed = true end
-    end
-    return removed
+    id = getTimerId(id)
   end
-  if id == nil or not timerState.active[id] then return false end
-  timerState.active[id] = nil
-  return true
-end
 
-function clearRoundTimers()
-  timerState.round = timerState.round + 1
-  for id, timer in pairs(timerState.active) do
-    if timer.round ~= nil then timerState.active[id] = nil end
+  if timerList[id] and timerList[id].isEnabled then
+    timerList[id].isEnabled = false
+    List.pushright(timersPool, id)
+    return true
   end
+  return false
 end
 
 function clearTimers()
-  timerState.round = timerState.round + 1
-  timerState.active = {}
+  local timer
+  repeat
+    timer = List.popleft(timersPool)
+    if timer then
+      table.remove(timerList, timer)
+    end
+  until timer == nil
 end
 
 function timersLoop()
-  local pending = {}
-  for id in pairs(timerState.active) do pending[#pending + 1] = id end
-  table.sort(pending)
-  for _, id in ipairs(pending) do
-    local timer = timerState.active[id]
-    if timer and not timer.isPaused then
-      timer.currentTime = timer.currentTime + 500
-      if timer.currentTime >= timer.time then
-        timer.currentTime = 0
-        timer.currentLoop = timer.currentLoop + 1
-        local complete = timer.loops > 0 and timer.currentLoop >= timer.loops
-        if complete then timerState.active[id] = nil end
-        if timer.callback then
-          timer.callback(timer.currentLoop, (table.unpack or unpack)(timer.arguments, 1, timer.arguments.n))
+  for id = 1, #timerList do
+    local timer = timerList[id]
+    if timer.isEnabled and timer.isPaused == false then
+      if not timer.isComplete then
+        timer.currentTime = timer.currentTime + 500
+        if timer.currentTime >= timer.time then
+          timer.currentTime = 0
+          timer.currentLoop = timer.currentLoop + 1
+          if timer.loops > 0 then
+            if timer.currentLoop >= timer.loops then
+              timer.isComplete = true
+              if eventTimerComplete ~= nil then
+                eventTimerComplete(id, timer.label)
+              end
+              removeTimer(id)
+            end
+          end
+          if timer.callback ~= nil then
+            timer.callback(timer.currentLoop, table.unpack(timer.arguments))
+          end
         end
-        if complete and eventTimerComplete then eventTimerComplete(id, timer.label) end
       end
     end
   end

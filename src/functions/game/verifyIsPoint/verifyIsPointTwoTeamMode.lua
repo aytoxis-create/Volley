@@ -8,7 +8,7 @@ function verifyIsPointTwoTeamsMode()
   for j = 1, quantityBalls do
     local ballStats = tfm.get.room.objectList[ballsId[j]]
 
-    if ballStats and ballOnGameTwoBalls[j] and ballsId[j] ~= nil and ballOnGame then
+    if ballOnGameTwoBalls[j] and ballsId[j] ~= nil and ballOnGame then
       if #teamPointsArea1 > 0 or #teamPointsArea2 > 0 or #teamPointsArea3 > 0 or #teamPointsArea4 > 0 then
         pointsTwoTeamsMode(ballStats.x, ballStats.y, j)
       else
@@ -25,7 +25,8 @@ function verifyIsPointTwoTeamsMode()
             twoTeamsModeWinner("red")
             updateRankingTwoTeamsMode()
             tfm.exec.removeObject (ballsId[j])
-            beginEndGame()
+            mode = "endGame"
+            gameTimeEnd = os.time() + 5000
           else
             if #spawnBallArea800 ~= 0 then
               randomIndex = math.random(1, #spawnBallArea800)
@@ -50,7 +51,8 @@ function verifyIsPointTwoTeamsMode()
             tfm.exec.removeObject (ballsId[j])
             showTheScore()
             showMessageWinner()
-            beginEndGame()
+            mode = "endGame"
+            gameTimeEnd = os.time() + 5000
           else
             if #spawnBallArea400 ~= 0 then
               randomIndex = math.random(1, #spawnBallArea400)
@@ -75,7 +77,8 @@ function verifyIsPointTwoTeamsMode()
             twoTeamsModeWinner("red")
             updateRankingTwoTeamsMode()
             tfm.exec.removeObject (ballsId[j])
-            beginEndGame()
+            mode = "endGame"
+            gameTimeEnd = os.time() + 5000
           else
             if #spawnBallArea1600 ~= 0 then
               randomIndex = math.random(1, #spawnBallArea1600)
@@ -100,7 +103,8 @@ function verifyIsPointTwoTeamsMode()
             tfm.exec.removeObject (ballsId[j])
             showTheScore()
             showMessageWinner()
-            beginEndGame()
+            mode = "endGame"
+            gameTimeEnd = os.time() + 5000
           else
             if #spawnBallArea1200 ~= 0 then
               randomIndex = math.random(1, #spawnBallArea1200)

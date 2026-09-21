@@ -6,10 +6,7 @@
 	"scripts": {
 		"build": "node build.js",
 		"watch": "node build.js watch",
-		"minify": "node build.js minify",
-		"test:build": "node tests/build.js",
-		"test:startup": "python tests/startup.py volley.lua",
-		"test:timers": "python tests/timers.py volley.lua"
+		"minify": "node build.js minify"
 	},
 	"keywords": [],
 	"author": "",

@@ -4,7 +4,7 @@ function eventPlayerDied(name)
   if playerInGame[playerName] and gameStats.canTransform and not playerPressSpace[name] then
     isPlayerDead[playerName] = true
     
-    addRoundTimer(function(i)
+    addTimer(function(i) 
       if i == 1 then
         tfm.exec.respawnPlayer(playerName)
 

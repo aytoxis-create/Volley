@@ -1,5 +1,5 @@
 function verifyIsPoint()
-  verifyBallCoordinates = addRoundTimer(function(i)
+  verifyBallCoordinates = addTimer(function(i)
     if gameStats.teamsMode then
       setLostLife()
       return
@@ -29,7 +29,7 @@ function verifyIsPoint()
     for j = 1, quantityBalls do
       local ballStats = tfm.get.room.objectList[ballsId[j]]
 
-      if ballStats and ballOnGameTwoBalls[j] and ballsId[j] ~= nil and ballOnGame then
+      if ballOnGameTwoBalls[j] and ballsId[j] ~= nil and ballOnGame then
         if #teamPointsArea1 > 0 or #teamPointsArea2 > 0 then
           pointsNormalMode(ballStats.x, ballStats.y, j)
         else
@@ -46,7 +46,8 @@ function verifyIsPoint()
               showMessageWinner()
               normalModeTeamWinner("blue")
               updateRankingNormalMode()
-              beginEndGame()
+              mode = "endGame"
+              gameTimeEnd = os.time() + 5000
             else
               if gameStats.gameMode == "3v3" then
                 if #spawnBallArea800 ~= 0 then
@@ -83,7 +84,8 @@ function verifyIsPoint()
               tfm.exec.removeObject(ballsId[j])
               normalModeTeamWinner("red")
               updateRankingNormalMode()
-              beginEndGame()
+              mode = "endGame"
+              gameTimeEnd = os.time() + 5000
             else
               if gameStats.gameMode == "3v3" then
                 if #spawnBallArea400 ~= 0 then

@@ -28,33 +28,34 @@ function verifyIsPointRealMode()
         realModeWinner("red")
       end
       updateRankingRealMode()
-      beginEndGame()
+      mode = "endGame"
+      gameTimeEnd = os.time() + 5000
     else
       ballOnGame = false
       if gameStats.redQuantitySpawn > 0 or gameStats.redServe then
         gameStats.canTransform = false
-        local delayTeleport = addRoundTimer(function(i)
+        local delayTeleport = addTimer(function(i)
           if i == 1 then
             choosePlayerServe("blue")
             teamServe("blue")
           end
         end, 4000, 1, "delayTeleport")
 
-        local delaySpawnBall = addRoundTimer(function(i)
+        local delaySpawnBall = addTimer(function(i)
           if i == 1 then
             spawnBallRealMode("blue")
           end
         end, 6000, 1, "delaySpawnBall")
       else
         gameStats.canTransform = false
-        local delayTeleport = addRoundTimer(function(i)
+        local delayTeleport = addTimer(function(i)
           if i == 1 then
             choosePlayerServe("red")
             teamServe("red")
           end
         end, 4000, 1, "delayTeleport")
 
-        local delaySpawnBall = addRoundTimer(function(i)
+        local delaySpawnBall = addTimer(function(i)
           if i == 1 then
             spawnBallRealMode("red")
           end
@@ -76,18 +77,19 @@ function verifyIsPointRealMode()
       showMessageWinner()
       realModeWinner("blue")
       updateRankingRealMode()
-      beginEndGame()
+      mode = "endGame"
+      gameTimeEnd = os.time() + 5000
     else
       ballOnGame = false
       gameStats.canTransform = false
-      local delayTeleport = addRoundTimer(function(i)
+      local delayTeleport = addTimer(function(i)
         if i == 1 then
           choosePlayerServe("blue")
           teamServe("blue")
         end
       end, 4000, 1, "delayTeleport")
 
-      local delaySpawnBall = addRoundTimer(function(i)
+      local delaySpawnBall = addTimer(function(i)
         if i == 1 then
           spawnBallRealMode("blue")
         end
@@ -108,18 +110,19 @@ function verifyIsPointRealMode()
       updateRankingRealMode()
       ballOnGame = false
       tfm.exec.removeObject(ball_id)
-      beginEndGame()
+      mode = "endGame"
+      gameTimeEnd = os.time() + 5000
     else
       ballOnGame = false
       gameStats.canTransform = false
-      local delayTeleport = addRoundTimer(function(i)
+      local delayTeleport = addTimer(function(i)
         if i == 1 then
           choosePlayerServe("red")
           teamServe("red")
         end
       end, 4000, 1, "delayTeleport")
 
-      local delaySpawnBall = addRoundTimer(function(i)
+      local delaySpawnBall = addTimer(function(i)
         if i == 1 then
           spawnBallRealMode("red")
         end
@@ -151,33 +154,34 @@ function verifyIsPointRealMode()
         realModeWinner("blue")
       end
       updateRankingRealMode()
-      beginEndGame()
+      mode = "endGame"
+      gameTimeEnd = os.time() + 5000
     else
       ballOnGame = false
       if gameStats.blueQuantitySpawn > 0 or gameStats.blueServe then
         gameStats.canTransform = false
-        local delayTeleport = addRoundTimer(function(i)
+        local delayTeleport = addTimer(function(i)
           if i == 1 then
             choosePlayerServe("red")
             teamServe("red")
           end
         end, 4000, 1, "delayTeleport")
 
-        local delaySpawnBall = addRoundTimer(function(i)
+        local delaySpawnBall = addTimer(function(i)
           if i == 1 then
             spawnBallRealMode("red")
           end
         end, 6000, 1, "delaySpawnBall")
       else
         gameStats.canTransform = false
-        local delayTeleport = addRoundTimer(function(i)
+        local delayTeleport = addTimer(function(i)
           if i == 1 then
             choosePlayerServe("blue")
             teamServe("blue")
           end
         end, 4000, 1, "delayTeleport")
 
-        local delaySpawnBall = addRoundTimer(function(i)
+        local delaySpawnBall = addTimer(function(i)
           if i == 1 then
             spawnBallRealMode("blue")
           end

@@ -10,7 +10,7 @@ function leaveTeamTeamsModeConfig(name)
           tfm.exec.killPlayer(name)
           removePlayerOnSpawnConfig(name)
 
-          local movePlayer = addRoundTimer(function(i)
+          local movePlayer = addTimer(function(i)
             tfm.exec.respawnPlayer(name)
 
             teleportPlayersToSpecWithSpecificSpawn(name)
@@ -33,7 +33,7 @@ function leaveTeamTeamsModeConfig(name)
         updateTeamsColors(1)
         gameStats.canTransform = false
         disablePlayersCanTransform(4000)
-        delayToToggleMap = addRoundTimer(function(i)
+        delayToToggleMap = addTimer(function(i)
           if i == 1 then
             toggleMap()
           end
@@ -51,7 +51,7 @@ function leaveTeamTeamsModeConfig(name)
         tfm.exec.killPlayer(name)
         removePlayerOnSpawnConfig(name)
 
-        local movePlayer = addRoundTimer(function(i)
+        local movePlayer = addTimer(function(i)
           tfm.exec.respawnPlayer(name)
           teleportPlayersToSpecWithSpecificSpawn(name)
         end, 1000, 1, "movePlayer")
@@ -80,7 +80,7 @@ function leaveTeamTeamsModeConfig(name)
       updateTeamsColors(index)
       gameStats.canTransform = false
       disablePlayersCanTransform(4000)
-      delayToToggleMap = addRoundTimer(function(i)
+      delayToToggleMap = addTimer(function(i)
         if i == 1 then
           toggleMap()
         end
@@ -96,7 +96,7 @@ function leaveTeamTeamsModeConfig(name)
         tfm.exec.killPlayer(name)
         removePlayerOnSpawnConfig(name)
 
-        local movePlayer = addRoundTimer(function(i)
+        local movePlayer = addTimer(function(i)
           tfm.exec.respawnPlayer(name)
           teleportPlayersToSpecWithSpecificSpawn(name)
         end, 1000, 1, "movePlayer")
@@ -126,7 +126,7 @@ function leaveTeamTeamsModeConfig(name)
       updateTeamsColors(index)
       gameStats.canTransform = false
       disablePlayersCanTransform(4000)
-      delayToToggleMap = addRoundTimer(function(i)
+      delayToToggleMap = addTimer(function(i)
         if i == 1 then
           toggleMap()
         end
@@ -142,7 +142,7 @@ function leaveTeamTeamsModeConfig(name)
         tfm.exec.killPlayer(name)
         removePlayerOnSpawnConfig(name)
 
-        local movePlayer = addRoundTimer(function(i)
+        local movePlayer = addTimer(function(i)
           tfm.exec.respawnPlayer(name)
           teleportPlayersToSpecWithSpecificSpawn(name)
         end, 1000, 1, "movePlayer")
@@ -171,7 +171,7 @@ function leaveTeamTeamsModeConfig(name)
       updateTeamsColors(index)
       gameStats.canTransform = false
       disablePlayersCanTransform(4000)
-      delayToToggleMap = addRoundTimer(function(i)
+      delayToToggleMap = addTimer(function(i)
         if i == 1 then
           toggleMap()
         end
@@ -186,7 +186,7 @@ function leaveTeamTeamsModeConfig(name)
           tfm.exec.killPlayer(name)
           removePlayerOnSpawnConfig(name)
 
-          local movePlayer = addRoundTimer(function(i)
+          local movePlayer = addTimer(function(i)
             tfm.exec.respawnPlayer(name)
             teleportPlayersToSpecWithSpecificSpawn(name)
           end, 1000, 1, "movePlayer")
@@ -214,7 +214,8 @@ function leaveTeamTeamsModeConfig(name)
           threeTeamsModeWinner(messageTeamsLifes[1], teamsPlayersOnGame[1])
           updateRankingThreeTeamsMode()
           tfm.exec.removeObject(ball_id)
-          beginEndGame()
+          mode = "endGame"
+          gameTimeEnd = os.time() + 5000
           return
         end
 
@@ -229,7 +230,7 @@ function leaveTeamTeamsModeConfig(name)
         toggleMapType()
         gameStats.canTransform = false
         disablePlayersCanTransform(4000)
-        delayToToggleMap = addRoundTimer(function(i)
+        delayToToggleMap = addTimer(function(i)
           if i == 1 then
             toggleMap()
           end
@@ -248,7 +249,7 @@ function leaveTeamTeamsModeConfig(name)
           tfm.exec.killPlayer(name)
           removePlayerOnSpawnConfig(name)
 
-          local movePlayer = addRoundTimer(function(i)
+          local movePlayer = addTimer(function(i)
             tfm.exec.respawnPlayer(name)
             teleportPlayersToSpecWithSpecificSpawn(name)
           end, 1000, 1, "movePlayer")
@@ -273,7 +274,8 @@ function leaveTeamTeamsModeConfig(name)
         fourTeamsModeWinner(messageTeamsLifes[1], teamsPlayersOnGame[1])
         updateRankingFourTeamsMode()
         tfm.exec.removeObject(ball_id)
-        beginEndGame()
+        mode = "endGame"
+        gameTimeEnd = os.time() + 5000
         return
       end
 

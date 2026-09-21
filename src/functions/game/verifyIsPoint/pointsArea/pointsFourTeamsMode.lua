@@ -29,7 +29,7 @@ function pointsFourTeamsMode(ballX, ballY, index, typeMap, teamIndex)
             updateTeamsColors(1)
             gameStats.canTransform = false
             
-            delayToToggleMap = addRoundTimer(function(i)
+            delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
               end
@@ -83,7 +83,7 @@ function pointsFourTeamsMode(ballX, ballY, index, typeMap, teamIndex)
             updateTeamsColors(2)
             gameStats.canTransform = false
             
-            delayToToggleMap = addRoundTimer(function(i)
+            delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
               end
@@ -135,7 +135,7 @@ function pointsFourTeamsMode(ballX, ballY, index, typeMap, teamIndex)
             updateTeamsColors(3)
             gameStats.canTransform = false
             
-            delayToToggleMap = addRoundTimer(function(i)
+            delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
               end
@@ -187,7 +187,7 @@ function pointsFourTeamsMode(ballX, ballY, index, typeMap, teamIndex)
             updateTeamsColors(4)
             gameStats.canTransform = false
             
-            delayToToggleMap = addRoundTimer(function(i)
+            delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
               end
@@ -239,7 +239,7 @@ function pointsFourTeamsMode(ballX, ballY, index, typeMap, teamIndex)
             toggleMapType()
             gameStats.canTransform = false
             
-            delayToToggleMap = addRoundTimer(function(i)
+            delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
               end
@@ -293,7 +293,7 @@ function pointsFourTeamsMode(ballX, ballY, index, typeMap, teamIndex)
             updateTeamsColors(2)
             gameStats.canTransform = false
             
-            delayToToggleMap = addRoundTimer(function(i)
+            delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
               end
@@ -347,7 +347,7 @@ function pointsFourTeamsMode(ballX, ballY, index, typeMap, teamIndex)
             updateTeamsColors(3)
             gameStats.canTransform = false
             
-            delayToToggleMap = addRoundTimer(function(i)
+            delayToToggleMap = addTimer(function(i)
               if i == 1 then
                 toggleMap()
               end
@@ -405,7 +405,8 @@ function pointsFourTeamsMode(ballX, ballY, index, typeMap, teamIndex)
             updateTwoBallOnGame()
             
             tfm.exec.removeObject (ballsId[index])
-            beginEndGame()
+            mode = "endGame"
+            gameTimeEnd = os.time() + 5000
             return
           end
           tfm.exec.chatMessage(messageTeamsLostOneLife[1], nil)
@@ -456,7 +457,8 @@ function pointsFourTeamsMode(ballX, ballY, index, typeMap, teamIndex)
             updateRankingFourTeamsMode()
             updateTwoBallOnGame()
             tfm.exec.removeObject (ballsId[index])
-            beginEndGame()
+            mode = "endGame"
+            gameTimeEnd = os.time() + 5000
             return
           end
           tfm.exec.chatMessage(messageTeamsLostOneLife[2], nil)

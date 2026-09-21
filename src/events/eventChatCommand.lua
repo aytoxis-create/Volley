@@ -106,19 +106,6 @@ local function cmdSetTransformDuration(args)
   return 0
 end
 
--- Keep chat lists in small messages instead of sending one oversized block.
-local function sendCommandList(text, name)
-  local chunk = ""
-  for line in (text .. "\n"):gmatch("([^\n]*)\n") do
-    if #chunk + #line + 1 > 800 and #chunk > 0 then
-      tfm.exec.chatMessage(chunk, name)
-      chunk = ""
-    end
-    chunk = chunk == "" and line or (chunk .. "\n" .. line)
-  end
-  if #chunk > 0 then tfm.exec.chatMessage(chunk, name) end
-end
-
 local function cmdCommands(args)
   local name = args[1]
   local userLevel = USER_PERMISSIONS[name] or 1
@@ -137,7 +124,7 @@ local function cmdCommands(args)
   local result = "<bl>" .. table.concat(finalBuffer, '\n')
 
   if #result > 0 then
-    sendCommandList(result, name)
+    tfm.exec.chatMessage(result, name)
   else
     tfm.exec.chatMessage("<j>No commands available.<n>", name)
   end
@@ -256,11 +243,6 @@ end
 local function cmdMaps(args)
   local name = args[1]
 
-  if gameStats.realMode then
-    tfm.exec.chatMessage("<j>Map voting is unavailable in Real Mode.<n>", name)
-    return
-  end
-
   local str = " <vp>Volley maps\n"
   local mapList = gameStats.twoTeamsMode and customMapsFourTeamsMode or
       gameStats.threeTeamsMode and customMapsThreeTeamsMode or
@@ -278,7 +260,7 @@ local function cmdMaps(args)
 
   str = str .. table.concat(lines, '\n')
   str = str .. "\n\n<j>To vote type !votemap number, example: !votemap 1 <n> "
-  sendCommandList(str, name)
+  tfm.exec.chatMessage(str, name)
 end
 
 local function cmdBalls(args)
@@ -523,7 +505,8 @@ local function cmdLobby(args)
   ui.removeTextArea(899899)
   ui.removeTextArea(8998991)
 
-  beginEndGame()
+  mode = "endGame"
+  gameTimeEnd = os.time() + 5000
 
   -- One single state variable holding the mode
   -- name would prevent this crime against the
@@ -1389,85 +1372,29 @@ local function cmdSyncTFM(args)
 end
 
 local function cmdTeleport(args)
-  local name = args[1]
-  -- The final argument is the command name added by the dispatcher.
-  if #args ~= 3 and #args ~= 4 then
-    tfm.exec.chatMessage('<j>Usage: !tp [Player#0000] red|blue|yellow|green<n>', name)
+  if #args < 2 then
+    tfm.exec.chatMessage('<j> Command needs at least 2 arguments.')
     return
   end
-  if mode ~= 'gameStart' then
-    tfm.exec.chatMessage('<j>Teleport is available during a match.<n>', name)
-    return
-  end
-  local target = name
-  if #args == 4 then
-    target = nil
-    for player in pairs(tfm.get.room.playerList) do
-      if player:lower() == args[2]:lower() then target = player; break end
-    end
-  end
-  if not target or tfm.get.room.playerList[target].isDead then
-    tfm.exec.chatMessage('<j>Player not found or dead.<n>', name)
-    return
-  end
-  local aliases = {red='red', rouge='red', blue='blue', bleu='blue', yellow='yellow', jaune='yellow', green='green', vert='green'}
-  local color = aliases[args[#args - 1]:lower()]
-  local groups = {yellow=playersYellow, red=playersRed, blue=playersBlue, green=playersGreen}
-  local spawns, x
-  if gameStats.teamsMode or gameStats.threeTeamsMode then
-    local slot
-    if gameStats.typeMap == 'large4v4' then
-      local slots = gameStats.threeTeamsMode and {red=1,blue=2,green=3} or {yellow=1,red=2,blue=3,green=4}
-      slot = slots[color]
-    else
-      for i, team in ipairs(teamsPlayersOnGame or {}) do
-        if groups[color] and team == groups[color] then slot = i; break end
-      end
-    end
-    if slot then
-      spawns = ({playersSpawn400,playersSpawn800,playersSpawn1200,playersSpawn1600})[slot]
-      local width = gameStats.threeTeamsMode and 600 or 400
-      x = width * (slot - 0.5)
-    end
-  elseif color == 'red' or color == 'blue' then
-    local red = color == 'red'
-    if gameStats.realMode then
-      x = red and 900 or 1700
-    elseif gameStats.twoTeamsMode then
-      spawns = red and playersSpawn800 or playersSpawn1200
-      x = red and 600 or 1000
-    elseif gameStats.gameMode == '3v3' then
-      spawns = red and playersSpawn400 or playersSpawn800
-      x = red and 101 or 700
-    elseif gameStats.gameMode == '4v4' then
-      spawns = red and playersSpawn800 or playersSpawn1600
-      x = red and 301 or 900
-    else
-      x = red and 401 or 1500
-    end
-  end
-  if not x then
-    tfm.exec.chatMessage('<j>Unknown team or team unavailable on this map.<n>', name)
-    return
-  end
-  local y = 334
-  -- Read spawn coordinates without registering the player in another team's
-  -- spawn occupancy, roster, colours, or match history.
-  if spawns and #spawns > 0 then
-    local chosen = spawns[1]
-    for i = 2, #spawns do
-      local candidate = spawns[i]
-      local count, best = #(candidate.players or {}), #(chosen.players or {})
-      if count < best or (count == best and (candidate.spawnPriority or 0) < (chosen.spawnPriority or 0)) then
-        chosen = candidate
-      end
-    end
-    x, y = chosen.x, chosen.y
-  end
-  tfm.exec.movePlayer(target, x, y, false, 0, 0, false)
-  tfm.exec.chatMessage('<vi>' .. target .. ' teleported to ' .. color .. ' spawn by ' .. name .. '.<n>', nil)
-end
 
+  local name = args[1]
+  local target = name
+
+  local colorValues = { yellow = 200, blue = 400, red = 600, green = 1000 }
+
+  local x = colorValues[args[2]] or tonumber(args[2]) or 600
+  local y = tonumber(args[3]) or 350
+
+  if #args == 4 then
+    target = args[2]
+    x = colorValues[args[3]] or tonumber(args[3]) or 600
+    y = (colorValues[args[4]] or tonumber(args[4])) or 350
+  end
+
+  tfm.exec.movePlayer(target, x, y)
+  tfm.exec.chatMessage("<vi>" .. name .. " teleported the player " .. target .. "<n>",
+    nil)
+end
 
 -- Dispatcher (Unified Command Table)
 COMMANDS = {
