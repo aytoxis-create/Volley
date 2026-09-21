@@ -1,4 +1,5 @@
 function startGame()
+  clearRoundTimers()
   gameStats.canTransform = false
   if not globalSettings.minimalist then
     disablePlayersCanTransform(3500)
@@ -24,7 +25,7 @@ function startGame()
 
   globalSettings.minimalistToggleMap = true
 
-  delaySpawnBall = addTimer(function(i)
+  delaySpawnBall = addRoundTimer(function(i)
     if i == 1 then
       updateBoundariesFromMap()
       teleportPlayers()
@@ -44,7 +45,7 @@ function startGame()
   end, delayMS)
 
   if globalSettings.minimalist then
-    addTimer(function(i) 
+    addRoundTimer(function(i)
       gameStats.canTransform = true
     end, delayMS + 1500)
   end

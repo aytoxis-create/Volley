@@ -63,7 +63,7 @@ local function handleConsumables(name, key, x, y, offsetX)
     playerConsumable[name] = false
 
     -- Cooldown reset (player-specific timer)
-    addTimer(function()
+    addRoundTimer(function()
       playerConsumable[name] = true
       tfm.exec.chatMessage("<bv>You can spawn a new consumable<n>", name)
     end, 5000, 1, "enablePlayerConsumable_" .. name)
@@ -78,7 +78,7 @@ local function handleConsumables(name, key, x, y, offsetX)
     playerConsumables[name] = playerConsumables[name] or {}
     table.insert(playerConsumables[name], id)
 
-    addTimer(function()
+    addRoundTimer(function()
       local queue = playerConsumables[name]
       if queue and #queue > 0 then
         local removedId = table.remove(queue, 1)
@@ -106,7 +106,7 @@ local function handleRealMode(name, key, x)
       "<bv>you are outside the court you have 7 seconds to make an action, otherwise you will not be able to use the TRANSFORM key outside the court<n>"
       tfm.exec.chatMessage(warning, name)
     end
-    addTimer(function() playerOutOfCourt[name] = true end, 7000, 1, "delay_" .. name)
+    addRoundTimer(function() playerOutOfCourt[name] = true end, 7000, 1, "delay_" .. name)
   else
     removeTimer("delay_" .. name)
     showOutOfCourtText[name] = false
@@ -225,7 +225,7 @@ local function handlePlayerTransform(name, x, y)
   local transformDuration = players[name].transformDuration * 1000
   local transformCooldown = math.max(100, 400 - (ping / 2))
 
-  addTimer(function()
+  addRoundTimer(function()
     tfm.exec.removePhysicObject(groundId)
     playerPressSpace[name] = false
     tfm.exec.respawnPlayer(name)
@@ -236,7 +236,7 @@ local function handlePlayerTransform(name, x, y)
     end
 
     -- Re-enable transform ability after compensated cooldown
-    addTimer(function()
+    addRoundTimer(function()
       playerCanTransform[name] = true
     end, transformCooldown, 1, "delayOnTransform_" .. name)
   end, transformDuration, 1, "removeGround_" .. name)

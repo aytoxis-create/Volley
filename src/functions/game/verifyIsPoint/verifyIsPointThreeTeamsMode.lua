@@ -40,7 +40,7 @@ function verifyIsPointThreeTeamsMode()
             toggleMapType()
             updateTeamsColors(1)
             gameStats.canTransform = false
-            delayToToggleMap = addTimer(function(i)
+            delayToToggleMap = addRoundTimer(function(i)
               if i == 1 then
                 toggleMap()
               end
@@ -81,7 +81,7 @@ function verifyIsPointThreeTeamsMode()
             toggleMapType()
             updateTeamsColors(2)
             gameStats.canTransform = false
-            delayToToggleMap = addTimer(function(i)
+            delayToToggleMap = addRoundTimer(function(i)
               if i == 1 then
                 toggleMap()
               end
@@ -122,7 +122,7 @@ function verifyIsPointThreeTeamsMode()
             toggleMapType()
             updateTeamsColors(3)
             gameStats.canTransform = false
-            delayToToggleMap = addTimer(function(i)
+            delayToToggleMap = addRoundTimer(function(i)
               if i == 1 then
                 toggleMap()
               end
@@ -175,8 +175,7 @@ function verifyIsPointThreeTeamsMode()
               updateTwoBallOnGame()
               
               tfm.exec.removeObject (ballsId[j])
-              mode = "endGame"
-              gameTimeEnd = os.time() + 5000
+              beginEndGame()
               return
             end
             tfm.exec.chatMessage(messageTeamsLostOneLife[1], nil)
@@ -218,8 +217,7 @@ function verifyIsPointThreeTeamsMode()
               updateRankingThreeTeamsMode()
               updateTwoBallOnGame()
               tfm.exec.removeObject (ballsId[j])
-              mode = "endGame"
-              gameTimeEnd = os.time() + 5000
+              beginEndGame()
               return
             end
             tfm.exec.chatMessage(messageTeamsLostOneLife[2], nil)

@@ -19,8 +19,7 @@ function pointsNormalMode(ballX, ballY, index)
           showMessageWinner()
           normalModeTeamWinner("blue")
           updateRankingNormalMode()
-          mode = "endGame"
-          gameTimeEnd = os.time() + 5000
+          beginEndGame()
         else
           if gameStats.gameMode == "3v3" then
             if #spawnBallArea800 ~= 0 then
@@ -68,8 +67,7 @@ function pointsNormalMode(ballX, ballY, index)
           tfm.exec.removeObject(ballsId[index])
           normalModeTeamWinner("red")
           updateRankingNormalMode()
-          mode = "endGame"
-          gameTimeEnd = os.time() + 5000
+          beginEndGame()
         else
           if gameStats.gameMode == "3v3" then
             if #spawnBallArea400 ~= 0 then

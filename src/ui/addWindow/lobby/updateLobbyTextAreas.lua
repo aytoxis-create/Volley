@@ -3,7 +3,7 @@ function updateLobbyTextAreas()
   initGame = os.time() + 25000
 
   if gameStats.teamsMode then
-    resetTeams = addTimer(function(i)
+    resetTeams = addRoundTimer(function(i)
       if i == 1 then
         playersRed = {
           [1] = { name = '' },
@@ -28,7 +28,7 @@ function updateLobbyTextAreas()
         }
       end
     end, 1000, 1, "resetTeams")
-    toggleTeams = addTimer(function(i)
+    toggleTeams = addRoundTimer(function(i)
       if i == 1 then
         for i = 1, 3 do
           clubhouse.joinArea(i, "<p align='center'><font size='14px'><a href='event:joinTeamRed" .. i .. "'>Join", nil, x[i],
@@ -51,7 +51,7 @@ function updateLobbyTextAreas()
         end
       end
     end, 1500, 1, "toggleTeams")
-    canJoin = addTimer(function(i)
+    canJoin = addRoundTimer(function(i)
       if i == 1 then
         gameStats.canJoin = true
       end
@@ -61,7 +61,7 @@ function updateLobbyTextAreas()
   end
 
   if gameStats.threeTeamsMode then
-    resetTeams = addTimer(function(i)
+    resetTeams = addRoundTimer(function(i)
       if i == 1 then
         playersRed = {
           [1] = { name = '' },
@@ -83,7 +83,7 @@ function updateLobbyTextAreas()
         }
       end
     end, 1000, 1, "resetTeams")
-    toggleTeams = addTimer(function(i)
+    toggleTeams = addRoundTimer(function(i)
       if i == 1 then
         for i = 1, 4 do
           clubhouse.joinArea(threeTeamsMode.id[i],
@@ -104,7 +104,7 @@ function updateLobbyTextAreas()
         end
       end
     end, 1500, 1, "toggleTeams")
-    canJoin = addTimer(function(i)
+    canJoin = addRoundTimer(function(i)
       if i == 1 then
         gameStats.canJoin = true
       end
@@ -113,7 +113,7 @@ function updateLobbyTextAreas()
     return
   end
 
-  resetTeams = addTimer(function(i)
+  resetTeams = addRoundTimer(function(i)
     if i == 1 then
       playersRed = {
         [1] = { name = '' },
@@ -134,7 +134,7 @@ function updateLobbyTextAreas()
     end
   end, 1000, 1, "resetTeams")
 
-  toggleTeams = addTimer(function(i)
+  toggleTeams = addRoundTimer(function(i)
     if i == 1 then
       for i = 1, 3 do
         clubhouse.joinArea(i, "<p align='center'><font size='14px'><a href='event:joinTeamRed" .. i .. "'>Join", nil, x[i],
@@ -158,7 +158,7 @@ function updateLobbyTextAreas()
     end
   end, 1500, 1, "toggleTeams")
 
-  canJoin = addTimer(function(i)
+  canJoin = addRoundTimer(function(i)
     if i == 1 then
       gameStats.canJoin = true
     end

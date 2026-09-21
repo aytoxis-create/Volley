@@ -7,11 +7,11 @@ function eventLoop(elapsedTime, remainingTime)
     local x = math.ceil((initGame - os.time()) / 1000)
 
     if not gameStats.stopTimer then
-      gameStats.initTimer = x
+      gameStats.initTimer = math.max(0, x)
       clubhouse.lobbyTimer()
     end
 
-    if x == 0 and not gameStats.stopTimer then
+    if x <= 0 and not gameStats.stopTimer then
       local playersOnGame = quantityPlayers()
 
       if gameStats.realMode then
@@ -122,7 +122,7 @@ function eventLoop(elapsedTime, remainingTime)
     local x = math.ceil((rulesTimer - os.time()) / 1000)
     local c = string.format("%d", x)
 
-    if x == 0 then
+    if x <= 0 then
       gameStats.redX = 601
       gameStats.blueX = 1999
       closeWindow(266, nil)
@@ -133,7 +133,7 @@ function eventLoop(elapsedTime, remainingTime)
     local x = math.ceil((gameTimeEnd - os.time()) / 1000)
     local c = string.format("%d", x)
 
-    if x == 0 then
+    if x <= 0 then
       countMatches = countMatches + 1
       ui.removeTextArea(899899)
       ui.removeTextArea(8998991)

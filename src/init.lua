@@ -1,4 +1,5 @@
 function init()
+  clearRoundTimers()
   clubhouse.reset()
   spawnBallArea400 = {}
   spawnBallArea800 = {}
@@ -280,6 +281,8 @@ function init()
     playersOnGameHistoric[name] = { teams = {} }
     isPlayerDead[name] = false
     playerPressSpace[name] = false
+    playerOutOfCourt[name] = false
+    showOutOfCourtText[name] = false
 
     --[[
     for i = 1, #keys do

@@ -19,8 +19,7 @@ function pointsTwoTeamsMode(ballX, ballY, index)
           twoTeamsModeWinner("red")
           updateRankingTwoTeamsMode()
           tfm.exec.removeObject (ballsId[index])
-          mode = "endGame"
-          gameTimeEnd = os.time() + 5000
+          beginEndGame()
         else
           if #spawnBallArea800 ~= 0 then
             randomIndex = math.random(1, #spawnBallArea800)
@@ -56,8 +55,7 @@ function pointsTwoTeamsMode(ballX, ballY, index)
           tfm.exec.removeObject (ballsId[index])
           showTheScore()
           showMessageWinner()
-          mode = "endGame"
-          gameTimeEnd = os.time() + 5000
+          beginEndGame()
         else
           if #spawnBallArea400 ~= 0 then
             randomIndex = math.random(1, #spawnBallArea400)
@@ -93,8 +91,7 @@ function pointsTwoTeamsMode(ballX, ballY, index)
           twoTeamsModeWinner("red")
           updateRankingTwoTeamsMode()
           tfm.exec.removeObject (ballsId[index])
-          mode = "endGame"
-          gameTimeEnd = os.time() + 5000
+          beginEndGame()
         else
           if #spawnBallArea1600 ~= 0 then
             randomIndex = math.random(1, #spawnBallArea1600)
@@ -130,8 +127,7 @@ function pointsTwoTeamsMode(ballX, ballY, index)
           tfm.exec.removeObject (ballsId[index])
           showTheScore()
           showMessageWinner()
-          mode = "endGame"
-          gameTimeEnd = os.time() + 5000
+          beginEndGame()
         else
           if #spawnBallArea1200 ~= 0 then
             randomIndex = math.random(1, #spawnBallArea1200)

@@ -23,7 +23,7 @@ function eventNewGame()
 
       tfm.exec.chatMessage("<ch>Minimalist mode is enabled, reloading the map to complete the settings.<n>", nil)
 
-      addTimer(function(i) 
+      addRoundTimer(function(i)
         tfm.exec.newGame(tfm.get.room.xmlMapInfo.xml)
 
         tfm.exec.addPhysicObject (99999, 800, webY, 

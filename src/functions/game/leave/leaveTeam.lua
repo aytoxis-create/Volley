@@ -12,7 +12,7 @@ function leaveTeam(name)
       else
         tfm.exec.killPlayer(name)
 
-        local movePlayer = addTimer(function(i)
+        local movePlayer = addRoundTimer(function(i)
           tfm.exec.respawnPlayer(name)
 
           teleportPlayersToSpecWithSpecificSpawn(name)
@@ -29,7 +29,7 @@ function leaveTeam(name)
       else
         tfm.exec.killPlayer(name)
 
-        local movePlayer = addTimer(function(i)
+        local movePlayer = addRoundTimer(function(i)
           tfm.exec.respawnPlayer(name)
 
           teleportPlayersToSpecWithSpecificSpawn(name)
